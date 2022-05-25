@@ -1,11 +1,35 @@
 <template>
   <div id="budgetCmpt" class="container-fluid col-12 offset-0 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-1 col-xl-5 offset-xl-2">
     <div class="header fixed">
-      <BudgetHeader :month="this.budgetMonth" :totalAllocated="totalAllocated" :totalSpent="totalSpent" :totalAvailable="totalAvailable" :money="moneyToAllocate"
+      <BudgetHeader :month="this.budgetMonth" :money="moneyToAllocate"
       @change-month="changeMonth" />
     </div>
     <div class="placeholder top">
-      <BudgetHeader :month="this.budgetMonth" :totalAllocated="totalAllocated" :totalSpent="totalSpent" :totalAvailable="totalAvailable" :money="moneyToAllocate" />
+      <BudgetHeader :month="this.budgetMonth" :money="moneyToAllocate" />
+    </div>
+    <!-- Table column label-->
+    <div class="flexForm row">
+      <div class="col-6">
+        <button class="btn fas fa-paperclip"/>
+      </div>
+      <div class="budgetTable col-6">
+        <div class="masterCategory collapsed row">
+            <div class="col-4">{{ $t("ALLOCATED") }}</div>
+            <div class="spent col-4">{{ $t("SPENT") }}</div>
+            <div class="col-4">{{ $t("AVAILABLE") }}</div>
+        </div>
+      </div>
+    </div>
+    <!-- Total for all table-->
+    <div  class="budgetTable col-12">
+      <div class="masterCategory collapsed">
+        <div class="flexForm row">
+          <div class="col-6">{{ $t("TOTAL") }}</div>
+          <div class="col-2">{{ addSpacesInThousand(this.totalAllocated) }}</div>
+          <div class="col-2 spent">{{ addSpacesInThousand(this.totalSpent) }}</div>
+          <div class="col-2">{{ addSpacesInThousand(this.totalAvailable) }}</div>
+        </div>
+      </div>
     </div>
     <div class="content">
       <div id="budgetTables">
@@ -203,6 +227,9 @@ export default defineComponent({
         this.categoryDataList[categoryId].available = 0
         AllocationService.updateAllocation(this.budgetMonth, categoryId, this.formerAllocations[categoryId])
       }
+    },
+    addSpacesInThousand (number: number): string {
+      return Utils.addSpacesInThousand(number)
     }
   }
 })

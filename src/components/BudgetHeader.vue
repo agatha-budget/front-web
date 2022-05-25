@@ -10,30 +10,6 @@
           </div>
           <div class="col-2 d-flex justify-content-center" ><button type="button" class="btn fas fa-chevron-right" v-on:click="this.goToNextMonth()"/></div>
       </div>
-        <!-- Table column label-->
-      <div class="flexForm row">
-        <div class="col-6">
-          <button class="btn fas fa-paperclip"/>
-        </div>
-        <div class="budgetTable col-6">
-          <div class="masterCategory collapsed row">
-              <div class="col-4">{{ $t("ALLOCATED") }}</div>
-              <div class="spent col-4">{{ $t("SPENT") }}</div>
-              <div class="col-4">{{ $t("AVAILABLE") }}</div>
-          </div>
-        </div>
-      </div>
-        <!-- Total for all table-->
-      <table  class="budgetTable col-12">
-        <thead class="masterCategory collapsed">
-          <tr>
-            <th class="col-6">{{ $t("TOTAL") }}</th>
-            <th class="col-2">{{ addSpacesInThousand(totalAllocated) }}</th>
-            <th class="col-2 spent">{{ addSpacesInThousand(totalSpent) }}</th>
-            <th class="col-2">{{ addSpacesInThousand(totalAvailable) }}</th>
-          </tr>
-        </thead>
-      </table>
     </div>
 </template>
 
@@ -52,18 +28,6 @@ export default defineComponent({
   emits: ['changeMonth'],
   props: {
     month: {
-      type: Number,
-      required: true
-    },
-    totalAllocated: {
-      type: Number,
-      required: true
-    },
-    totalSpent: {
-      type: Number,
-      required: true
-    },
-    totalAvailable: {
       type: Number,
       required: true
     },
