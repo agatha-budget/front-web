@@ -52,6 +52,11 @@
         <span class="cross fas fa-times-circle"/>
       </div>
 
+    <h3>iconButton</h3>
+
+      <button class="btn icon fas fa-paperclip"/>
+      <button class="btn icon greyed fas fa-paperclip"/>
+
   </div>
 </div>
 
@@ -112,6 +117,14 @@
       />
     </div>
 
+    <h3>PostIt</h3>
+    <div class="postIt">
+      <div class="containerCross col-12">
+        <span class="cross fas fa-times-circle"/>
+      </div>
+      <input type="text" class="inputPostIt">
+    </div>
+
     </div>
     <div class="col-md-6">
 
@@ -132,7 +145,7 @@
       <label for="textInput">Number</label>
       <input type="number" class="form-control" id="textInput" placeholder="0">
     </div>
-  </div>
+    </div>
 </div>
 
 <div class="designContainer col-8 offset-2 row">

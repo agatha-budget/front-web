@@ -8,30 +8,37 @@
       <BudgetHeader :month="this.budgetMonth" :money="moneyToAllocate" />
     </div>
     <!-- Table column label-->
-    <div class="flexForm row">
-      <div class="col-6">
-        <button class="btn fas fa-paperclip"/>
-      </div>
-      <div class="budgetTable col-6">
-        <div class="masterCategory collapsed row">
-            <div class="col-4">{{ $t("ALLOCATED") }}</div>
-            <div class="spent col-4">{{ $t("SPENT") }}</div>
-            <div class="col-4">{{ $t("AVAILABLE") }}</div>
-        </div>
-      </div>
-    </div>
-    <!-- Total for all table-->
-    <div  class="budgetTable col-12">
-      <div class="masterCategory collapsed">
-        <div class="flexForm row">
-          <div class="col-6">{{ $t("TOTAL") }}</div>
-          <div class="col-2">{{ addSpacesInThousand(this.totalAllocated) }}</div>
-          <div class="col-2 spent">{{ addSpacesInThousand(this.totalSpent) }}</div>
-          <div class="col-2">{{ addSpacesInThousand(this.totalAvailable) }}</div>
-        </div>
-      </div>
-    </div>
     <div class="content">
+      <div class="flexForm row">
+        <div class="col-6">
+          <button v-if="this.postItDisplayed" v-on:click="displayPostIt" class="btn icon greyed fas fa-cannabis"/>
+          <button v-else v-on:click="displayPostIt" class="btn icon fas fa-paperclip"/>
+        </div>
+        <div class="budgetTable col-6">
+          <div class="masterCategory collapsed row">
+              <div class="col-4">{{ $t("ALLOCATED") }}</div>
+              <div class="spent col-4">{{ $t("SPENT") }}</div>
+              <div class="col-4">{{ $t("AVAILABLE") }}</div>
+          </div>
+        </div>
+      </div>
+      <div v-if="postItDisplayed" class="postIt">
+        <div class="containerCross col-12">
+          <span v-on:click="displayPostIt" class="cross fas fa-times-circle"/>
+        </div>
+        <input type="text" class="inputPostIt">
+      </div>
+      <!-- Total for all table-->
+      <div  class="budgetTable col-12">
+        <div class="masterCategory collapsed">
+          <div class="flexForm row">
+            <div class="col-6">{{ $t("TOTAL") }}</div>
+            <div class="col-2">{{ addSpacesInThousand(this.totalAllocated) }}</div>
+            <div class="col-2 spent">{{ addSpacesInThousand(this.totalSpent) }}</div>
+            <div class="col-2">{{ addSpacesInThousand(this.totalAvailable) }}</div>
+          </div>
+        </div>
+      </div>
       <div id="budgetTables">
         <template class="budgetTable table" v-for="masterCategory of this.$store.state.masterCategories" :key="masterCategory" >
           <master-category-cmpt @update-allocation="updateAllocation" @empty-category="emptyCategory" :masterCategory="masterCategory" :categoryDataList="this.categoryDataList" />
@@ -76,6 +83,7 @@ interface BudgetCmptData {
     budgetMonth: number;
     amountInBudget: number;
     archiveVisible: boolean;
+    postItDisplayed: boolean;
 }
 
 export default defineComponent({
@@ -113,7 +121,8 @@ export default defineComponent({
       formerAllocations: {},
       budgetMonth: this.$props.month,
       amountInBudget: 0,
-      archiveVisible: false
+      archiveVisible: false,
+      postItDisplayed: false
     }
   },
   computed: {
@@ -230,6 +239,10 @@ export default defineComponent({
     },
     addSpacesInThousand (number: number): string {
       return Utils.addSpacesInThousand(number)
+    },
+    displayPostIt () {
+      this.postItDisplayed = !this.postItDisplayed
+      console.log(this.postItDisplayed)
     }
   }
 })
