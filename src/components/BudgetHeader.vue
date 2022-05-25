@@ -10,17 +10,21 @@
           </div>
           <div class="col-2 d-flex justify-content-center" ><button type="button" class="btn fas fa-chevron-right" v-on:click="this.goToNextMonth()"/></div>
       </div>
-      <table  class="budgetTable">
         <!-- Table column label-->
-        <thead class="masterCategory collapsed col-6 offset-6">
-          <tr>
-            <th class="col-6"></th>
-            <th class="col-2">{{ $t("ALLOCATED") }}</th>
-            <th class="col-2 spent">{{ $t("SPENT") }}</th>
-            <th class="col-2">{{ $t("AVAILABLE") }}</th>
-          </tr>
-        </thead>
+      <div class="flexForm row">
+        <div class="col-6">
+          <button class="btn fas fa-paperclip"/>
+        </div>
+        <div class="budgetTable col-6">
+          <div class="masterCategory collapsed row">
+              <div class="col-4">{{ $t("ALLOCATED") }}</div>
+              <div class="spent col-4">{{ $t("SPENT") }}</div>
+              <div class="col-4">{{ $t("AVAILABLE") }}</div>
+          </div>
+        </div>
+      </div>
         <!-- Total for all table-->
+      <table  class="budgetTable col-12">
         <thead class="masterCategory collapsed">
           <tr>
             <th class="col-6">{{ $t("TOTAL") }}</th>
