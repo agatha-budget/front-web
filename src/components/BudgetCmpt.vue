@@ -26,7 +26,13 @@
         <div class="containerCross col-12">
           <span v-on:click="displayPostIt" class="cross fas fa-times-circle"/>
         </div>
-        <input type="text" class="inputPostIt">
+        <div v-if="postItEditable"><textarea class="textarea" v-model="postItContent"/>
+          <btn class="actionButton">Valider</btn>
+        </div>
+        <div v-else>
+          <p>{{ postItContent }}</p>
+          <btn v-on:click="editPostIt" class="actionButton">Modifier</btn>
+        </div>
       </div>
       <!-- Total for all table-->
       <div  class="budgetTable col-12">
@@ -84,6 +90,8 @@ interface BudgetCmptData {
     amountInBudget: number;
     archiveVisible: boolean;
     postItDisplayed: boolean;
+    postItEditable: boolean;
+    postItContent: string;
 }
 
 export default defineComponent({
@@ -122,7 +130,9 @@ export default defineComponent({
       budgetMonth: this.$props.month,
       amountInBudget: 0,
       archiveVisible: false,
-      postItDisplayed: false
+      postItDisplayed: false,
+      postItEditable: false,
+      postItContent: 'Bonjour'
     }
   },
   computed: {
@@ -242,7 +252,15 @@ export default defineComponent({
     },
     displayPostIt () {
       this.postItDisplayed = !this.postItDisplayed
-      console.log(this.postItDisplayed)
+      if (!this.postItDisplayed) {
+        this.postItEditable = false
+      }
+      console.log('edit ' + this.postItEditable)
+      console.log('display ' + this.postItDisplayed)
+    },
+    editPostIt () {
+      this.postItEditable = true
+      console.log(this.postItEditable)
     }
   }
 })
