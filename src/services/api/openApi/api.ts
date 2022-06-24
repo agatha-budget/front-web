@@ -281,6 +281,31 @@ export interface Person {
      */
     'createDate'?: number;
 }
+/**
+ * 
+ * @export
+ * @interface PostIt
+ */
+export interface PostIt {
+    /**
+     * 
+     * @type {number}
+     * @memberof PostIt
+     */
+    'month': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostIt
+     */
+    'budgetId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostIt
+     */
+    'text': string;
+}
 
 /**
  * AccountApi - axios parameter creator
@@ -2927,20 +2952,17 @@ export const PostItApiAxiosParamCreator = function (configuration?: Configuratio
     return {
         /**
          * 
-         * @summary Add a new post-it or update an existing one
+         * @summary Get post-it by month and budget
          * @param {number} month month of the post-it (march 2022 &#x3D;&gt; 202203)
          * @param {string} budgetId 
-         * @param {string} text 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        addPostIt: async (month: number, budgetId: string, text: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        get: async (month: number, budgetId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'month' is not null or undefined
-            assertParamExists('addPostIt', 'month', month)
+            assertParamExists('get', 'month', month)
             // verify required parameter 'budgetId' is not null or undefined
-            assertParamExists('addPostIt', 'budgetId', budgetId)
-            // verify required parameter 'text' is not null or undefined
-            assertParamExists('addPostIt', 'text', text)
+            assertParamExists('get', 'budgetId', budgetId)
             const localVarPath = `/postIt`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2949,7 +2971,54 @@ export const PostItApiAxiosParamCreator = function (configuration?: Configuratio
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (month !== undefined) {
+                localVarQueryParameter['month'] = month;
+            }
+
+            if (budgetId !== undefined) {
+                localVarQueryParameter['budget_id'] = budgetId;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Add a new post-it or update an existing one
+         * @param {number} month month of the post-it (march 2022 &#x3D;&gt; 202203)
+         * @param {string} budgetId 
+         * @param {string} text 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        update: async (month: number, budgetId: string, text: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'month' is not null or undefined
+            assertParamExists('update', 'month', month)
+            // verify required parameter 'budgetId' is not null or undefined
+            assertParamExists('update', 'budgetId', budgetId)
+            // verify required parameter 'text' is not null or undefined
+            assertParamExists('update', 'text', text)
+            const localVarPath = `/postIt`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -2988,6 +3057,18 @@ export const PostItApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Get post-it by month and budget
+         * @param {number} month month of the post-it (march 2022 &#x3D;&gt; 202203)
+         * @param {string} budgetId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async get(month: number, budgetId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PostIt>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.get(month, budgetId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Add a new post-it or update an existing one
          * @param {number} month month of the post-it (march 2022 &#x3D;&gt; 202203)
          * @param {string} budgetId 
@@ -2995,8 +3076,8 @@ export const PostItApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async addPostIt(month: number, budgetId: string, text: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.addPostIt(month, budgetId, text, options);
+        async update(month: number, budgetId: string, text: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.update(month, budgetId, text, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -3011,6 +3092,17 @@ export const PostItApiFactory = function (configuration?: Configuration, basePat
     return {
         /**
          * 
+         * @summary Get post-it by month and budget
+         * @param {number} month month of the post-it (march 2022 &#x3D;&gt; 202203)
+         * @param {string} budgetId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        get(month: number, budgetId: string, options?: any): AxiosPromise<Array<PostIt>> {
+            return localVarFp.get(month, budgetId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Add a new post-it or update an existing one
          * @param {number} month month of the post-it (march 2022 &#x3D;&gt; 202203)
          * @param {string} budgetId 
@@ -3018,8 +3110,8 @@ export const PostItApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        addPostIt(month: number, budgetId: string, text: string, options?: any): AxiosPromise<string> {
-            return localVarFp.addPostIt(month, budgetId, text, options).then((request) => request(axios, basePath));
+        update(month: number, budgetId: string, text: string, options?: any): AxiosPromise<string> {
+            return localVarFp.update(month, budgetId, text, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -3033,6 +3125,19 @@ export const PostItApiFactory = function (configuration?: Configuration, basePat
 export class PostItApi extends BaseAPI {
     /**
      * 
+     * @summary Get post-it by month and budget
+     * @param {number} month month of the post-it (march 2022 &#x3D;&gt; 202203)
+     * @param {string} budgetId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PostItApi
+     */
+    public get(month: number, budgetId: string, options?: AxiosRequestConfig) {
+        return PostItApiFp(this.configuration).get(month, budgetId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary Add a new post-it or update an existing one
      * @param {number} month month of the post-it (march 2022 &#x3D;&gt; 202203)
      * @param {string} budgetId 
@@ -3041,8 +3146,8 @@ export class PostItApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PostItApi
      */
-    public addPostIt(month: number, budgetId: string, text: string, options?: AxiosRequestConfig) {
-        return PostItApiFp(this.configuration).addPostIt(month, budgetId, text, options).then((request) => request(this.axios, this.basePath));
+    public update(month: number, budgetId: string, text: string, options?: AxiosRequestConfig) {
+        return PostItApiFp(this.configuration).update(month, budgetId, text, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
