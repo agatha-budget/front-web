@@ -57,6 +57,13 @@
       <button class="btn icon fas fa-paperclip"/>
       <button class="btn icon greyed fas fa-paperclip"/>
 
+    <h3>ActionLabelIcon</h3>
+
+      <div class="actionLabelIcon">
+        <span class="illustration btn fas fa-filter"/>
+        <div class="text">petit mot sympatique</div>
+      </div>
+
   </div>
 </div>
 
@@ -263,7 +270,7 @@
           </td>
           <td class="col-3">
             <div class="numberInput form-group">
-                <input type="number" class="form-control" id="textInput" placeholder="0">
+                <input type="text" class="form-control" id="textInput" placeholder="0">
             </div>
           </td>
           <td class="col-3">300</td>
