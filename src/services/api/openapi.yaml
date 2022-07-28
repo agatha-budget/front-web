@@ -1163,7 +1163,7 @@ paths:
                 type: string
                 example: invalid category id
   /postIt:
-    put:
+    post:
       tags:
       - Post-it
       summary: Add a new post-it or update an existing one

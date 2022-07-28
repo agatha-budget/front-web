@@ -237,12 +237,6 @@ export interface Operation {
      * @memberof Operation
      */
     'memo': string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof Operation
-     */
-    'pending': boolean;
 }
 /**
  * 
@@ -3060,7 +3054,7 @@ export const PostItApiAxiosParamCreator = function (configuration?: Configuratio
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
