@@ -1,4 +1,4 @@
-import { Person, Operation, Account, Budget, Category, CategoryData as ICategoryData, MasterCategory } from '@/services/api/openApi/api'
+import { Person, Operation, Account, Budget, Category, CategoryData as ICategoryData, MasterCategory, PostIt } from '@/services/api/openApi/api'
 
 interface BudgetData {
     [monthComparable: number]: CategoryDataList;
@@ -32,5 +32,6 @@ const newCategoryName = ' Nouvelle Enveloppe'
 export {
   Person, Operation, CategoryData, BudgetData, Account, Budget, Category,
   MasterCategory, CategoryDataList, incomeCategoryId, transfertCategoryId,
-  newMasterCategoryName, newCategoryName, GroupSelectOption, SelectOption
+  newMasterCategoryName, newCategoryName, GroupSelectOption, SelectOption,
+  PostIt
 }

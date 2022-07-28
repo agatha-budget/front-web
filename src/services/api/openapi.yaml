@@ -1361,6 +1361,7 @@ components:
       - day
       - id
       - memo
+      - pending
       type: object
       properties:
         id:
@@ -1375,6 +1376,8 @@ components:
           type: number
         memo:
           type: string
+        pending:
+          type: boolean
     Allocation:
       required:
       - amount
