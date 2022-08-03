@@ -3000,11 +3000,11 @@ export const PostItApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        get: async (month: number, budgetId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getPostIt: async (month: number, budgetId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'month' is not null or undefined
-            assertParamExists('get', 'month', month)
+            assertParamExists('getPostIt', 'month', month)
             // verify required parameter 'budgetId' is not null or undefined
-            assertParamExists('get', 'budgetId', budgetId)
+            assertParamExists('getPostIt', 'budgetId', budgetId)
             const localVarPath = `/postIt`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3045,13 +3045,13 @@ export const PostItApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update: async (month: number, budgetId: string, text: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updatePostIt: async (month: number, budgetId: string, text: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'month' is not null or undefined
-            assertParamExists('update', 'month', month)
+            assertParamExists('updatePostIt', 'month', month)
             // verify required parameter 'budgetId' is not null or undefined
-            assertParamExists('update', 'budgetId', budgetId)
+            assertParamExists('updatePostIt', 'budgetId', budgetId)
             // verify required parameter 'text' is not null or undefined
-            assertParamExists('update', 'text', text)
+            assertParamExists('updatePostIt', 'text', text)
             const localVarPath = `/postIt`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3105,8 +3105,8 @@ export const PostItApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async get(month: number, budgetId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PostIt>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.get(month, budgetId, options);
+        async getPostIt(month: number, budgetId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PostIt>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPostIt(month, budgetId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -3118,8 +3118,8 @@ export const PostItApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async update(month: number, budgetId: string, text: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.update(month, budgetId, text, options);
+        async updatePostIt(month: number, budgetId: string, text: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updatePostIt(month, budgetId, text, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -3140,8 +3140,8 @@ export const PostItApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        get(month: number, budgetId: string, options?: any): AxiosPromise<Array<PostIt>> {
-            return localVarFp.get(month, budgetId, options).then((request) => request(axios, basePath));
+        getPostIt(month: number, budgetId: string, options?: any): AxiosPromise<Array<PostIt>> {
+            return localVarFp.getPostIt(month, budgetId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3152,8 +3152,8 @@ export const PostItApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update(month: number, budgetId: string, text: string, options?: any): AxiosPromise<string> {
-            return localVarFp.update(month, budgetId, text, options).then((request) => request(axios, basePath));
+        updatePostIt(month: number, budgetId: string, text: string, options?: any): AxiosPromise<string> {
+            return localVarFp.updatePostIt(month, budgetId, text, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -3174,8 +3174,8 @@ export class PostItApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PostItApi
      */
-    public get(month: number, budgetId: string, options?: AxiosRequestConfig) {
-        return PostItApiFp(this.configuration).get(month, budgetId, options).then((request) => request(this.axios, this.basePath));
+    public getPostIt(month: number, budgetId: string, options?: AxiosRequestConfig) {
+        return PostItApiFp(this.configuration).getPostIt(month, budgetId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3188,8 +3188,8 @@ export class PostItApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PostItApi
      */
-    public update(month: number, budgetId: string, text: string, options?: AxiosRequestConfig) {
-        return PostItApiFp(this.configuration).update(month, budgetId, text, options).then((request) => request(this.axios, this.basePath));
+    public updatePostIt(month: number, budgetId: string, text: string, options?: AxiosRequestConfig) {
+        return PostItApiFp(this.configuration).updatePostIt(month, budgetId, text, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

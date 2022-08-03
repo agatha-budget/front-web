@@ -1165,9 +1165,9 @@ paths:
   /postIt:
     post:
       tags:
-      - Post-it
+      - Post it
       summary: Add a new post-it or update an existing one
-      operationId: update
+      operationId: updatePostIt
       parameters:
       - name: month
         in: query
@@ -1210,7 +1210,7 @@ paths:
       tags:
       - Post-it
       summary: Get post-it by month and budget
-      operationId: get
+      operationId: getPostIt
       parameters:
       - name: month
         in: query

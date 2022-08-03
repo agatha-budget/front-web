@@ -27,7 +27,7 @@
           <span v-on:click="displayPostIt" class="cross fas fa-times-circle"/>
         </div>
         <div v-if="postItEditable"><textarea class="textarea" v-model="postItContent"/>
-          <btn class="actionButton">Valider</btn>
+          <btn class="actionButton" v-on:click="updatePostIt">Valider</btn>
         </div>
         <div v-else>
           <p>{{ postItContent }}</p>
@@ -73,13 +73,14 @@
 import { defineComponent } from 'vue'
 import BudgetDataService from '@/services/BudgetDataService'
 import AllocationService from '@/services/AllocationService'
-import { Account, Budget, CategoryData, CategoryDataList, newMasterCategoryName } from '@/model/model'
+import { Account, Budget, CategoryData, CategoryDataList, newMasterCategoryName, PostIt } from '@/model/model'
 import MasterCategoryCmpt from './MasterCategoryCmpt.vue'
 import Time from '@/utils/Time'
 import Utils from '@/utils/Utils'
 import MasterCategoryService from '@/services/MasterCategoryService'
 import StoreHandler from '@/store/StoreHandler'
 import BudgetHeader from '@/components/BudgetHeader.vue'
+import PostItService from '@/services/PostItService'
 
 interface BudgetCmptData {
     categoryDataList: CategoryDataList;
@@ -250,17 +251,24 @@ export default defineComponent({
     addSpacesInThousand (number: number): string {
       return Utils.addSpacesInThousand(number)
     },
-    displayPostIt () {
-      this.postItDisplayed = !this.postItDisplayed
-      if (!this.postItDisplayed) {
-        this.postItEditable = false
+    async displayPostIt () {
+      if (this.budget) {
+        const postIt: PostIt = await PostItService.getPostIt(this.budgetMonth, this.budget.id)
+        this.postItContent = (await PostItService.getPostIt(this.budgetMonth, this.budget.id)).text
+        this.postItDisplayed = !this.postItDisplayed
+        if (!this.postItDisplayed) {
+          this.postItEditable = false
+        }
       }
-      console.log('edit ' + this.postItEditable)
-      console.log('display ' + this.postItDisplayed)
     },
     editPostIt () {
       this.postItEditable = true
-      console.log(this.postItEditable)
+    },
+    updatePostIt () {
+      if (this.budget) {
+        PostItService.updatePostIt(this.budgetMonth, this.budget.id, this.postItContent)
+        this.postItDisplayed = false
+      }
     }
   }
 })
