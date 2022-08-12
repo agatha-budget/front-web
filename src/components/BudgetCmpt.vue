@@ -9,17 +9,17 @@
     </div>
     <!-- Table column label-->
     <div class="content">
-      <div class="flexForm row">
-        <div class="col-6">
-          <button v-if="this.postItDisplayed" v-on:click="displayPostIt" class="btn icon greyed fas fa-cannabis"/>
+      <div class="row flexForm">
+        <div class="col-6 iconPlace">
+          <button v-if="this.postItDisplayed" v-on:click="displayPostIt" class="btn icon greyed fas fa-paperclip"/>
           <button v-else v-on:click="displayPostIt" class="btn icon fas fa-paperclip"/>
         </div>
-        <div class="budgetTable col-6">
-          <div class="masterCategory collapsed row">
-              <div class="col-4">{{ $t("ALLOCATED") }}</div>
-              <div class="spent col-4">{{ $t("SPENT") }}</div>
-              <div class="col-4">{{ $t("AVAILABLE") }}</div>
-          </div>
+        <div class="budgetTable col-6 nameColumn">
+          <tr class="masterCategory collapsed row">
+            <th class="notDisapear col-4">{{ $t("ALLOCATED") }}</th>
+            <th class="spent col-4">{{ $t("SPENT") }}</th>
+            <th class="notDisapear col-4">{{ $t("AVAILABLE") }}</th>
+          </tr>
         </div>
       </div>
       <div v-if="postItDisplayed" class="postIt">
@@ -27,24 +27,22 @@
           <span v-on:click="displayPostIt" class="cross fas fa-times-circle"/>
         </div>
         <div v-if="postItEditable"><textarea class="textarea" v-model="postItContent"/>
-          <btn class="actionButton" v-on:click="updatePostIt">Valider</btn>
+          <btn class="actionButton" v-on:click="updatePostIt">{{ $t("SUBMIT") }}</btn>
         </div>
         <div v-else>
           <p>{{ postItContent }}</p>
-          <btn v-on:click="editPostIt" class="actionButton">Modifier</btn>
+          <btn v-on:click="editPostIt" class="actionButton">{{ $t("CHANGE") }}</btn>
         </div>
       </div>
       <!-- Total for all table-->
-      <div  class="budgetTable col-12">
-        <div class="masterCategory collapsed">
-          <div class="flexForm row">
-            <div class="col-6">{{ $t("TOTAL") }}</div>
-            <div class="col-2">{{ addSpacesInThousand(this.totalAllocated) }}</div>
-            <div class="col-2 spent">{{ addSpacesInThousand(this.totalSpent) }}</div>
-            <div class="col-2">{{ addSpacesInThousand(this.totalAvailable) }}</div>
-          </div>
-        </div>
-      </div>
+      <table class="budgetTable totalAmount">
+        <thead class="masterCategory collapsed">
+          <th class="col-6">{{ $t("TOTAL") }}</th>
+          <th class="col-2">{{ addSpacesInThousand(this.totalAllocated) }}</th>
+          <th class="col-2 spent">{{ addSpacesInThousand(this.totalSpent) }}</th>
+          <th class="col-2">{{ addSpacesInThousand(this.totalAvailable) }}</th>
+        </thead>
+      </table>
       <div id="budgetTables">
         <template class="budgetTable table" v-for="masterCategory of this.$store.state.masterCategories" :key="masterCategory" >
           <master-category-cmpt @update-allocation="updateAllocation" @empty-category="emptyCategory" :masterCategory="masterCategory" :categoryDataList="this.categoryDataList" />
