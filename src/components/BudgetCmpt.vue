@@ -10,9 +10,23 @@
     <!-- Table column label-->
     <div class="content">
       <div class="row flexForm">
-        <div class="col-6 iconPlace">
-          <button v-if="this.postItDisplayed" v-on:click="displayPostIt" class="btn icon greyed fas fa-paperclip"/>
-          <button v-else v-on:click="displayPostIt" class="btn icon fas fa-paperclip"/>
+          <div class="col-6 iconPlace row">
+          <div v-if="!edit" v-on:click="editFunction" class="actionLabelIcon col-6">
+            <span class="illustration btn fas fa-pen"/>
+            <div class="text">{{ $t("EDIT") }}</div>
+          </div>
+          <div v-else v-on:click="saveChange" class="actionLabelIcon col-6">
+            <span class="illustration greyed btn fas fa-pen"/>
+            <div class="text">{{ $t("SAVE_CHANGE") }}</div>
+          </div>
+          <div v-if="!postItDisplayed" v-on:click="displayPostIt" class="actionLabelIcon col-6">
+            <span class="illustration btn fas fa-paperclip"/>
+            <div class="text">{{ $t("POST-IT") }}</div>
+          </div>
+          <div v-else v-on:click="displayPostIt" class="actionLabelIcon col-6">
+            <span class="illustration btn greyed fas fa-paperclip"/>
+            <div class="text">{{ $t("POST-IT") }}</div>
+          </div>
         </div>
         <div class="budgetTable col-6 nameColumn">
           <tr class="masterCategory collapsed row">
@@ -43,8 +57,6 @@
           <th class="col-2">{{ addSpacesInThousand(this.totalAvailable) }}</th>
         </thead>
       </table>
-      <btn v-if="!edit" v-on:click="editFunction" class="actionButton edition">{{ $t("EDIT") }}</btn>
-      <btn v-else v-on:click="saveChange" class="actionButton edition">{{ $t("SAVE_CHANGE") }}</btn>
       <btn v-if="edit" v-on:click="this.createMasterCategory()" class="buttonGradation row">
         <span class="illustration fas fa-plus col-1"/>
         <span class="illustrationLabel col-11">{{ $t("ADD_MASTER_CATEGORY") }}</span>
@@ -257,7 +269,6 @@ export default defineComponent({
     },
     async displayPostIt () {
       if (this.budget) {
-        const postIt: PostIt = await PostItService.getPostIt(this.budgetMonth, this.budget.id)
         this.postItContent = (await PostItService.getPostIt(this.budgetMonth, this.budget.id)).text
         this.postItDisplayed = !this.postItDisplayed
         if (!this.postItDisplayed) {

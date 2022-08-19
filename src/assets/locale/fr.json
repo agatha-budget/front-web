@@ -123,9 +123,10 @@
     "PIE_CHART": "Répartition",
     "BAR_CHART": "Alloué / Dépensé",
     "SELECT_MASTER_CATEGORY": "sélectionner une catégorie",
-    "SAVE_CHANGE": "enregistrer les modifications",
+    "SAVE_CHANGE": "enregistrer",
     "THE_CATEGORY": "La catégorie ",
     "CATEGORIES": "Les catégories : ",
     "IS_IN_DEFICIT": " est déficitaire. Elle n'est donc pas affichée.",
-    "ARE_IN_DEFICIT": " sont déficiataires. Elles ne sont donc pas affichées."
+    "ARE_IN_DEFICIT": " sont déficiataires. Elles ne sont donc pas affichées.",
+    "POST-IT": "notes"
 }

@@ -70,7 +70,7 @@ a.navigationButton {
 }
 
 .buttonGradation {
-  margin: 0 0 5px 0;
+  margin: 10px 0 5px 0;
   width: 100%;
   border-radius: @borderRadius;
   border-style: hidden; /* hide standard table (collapsed) border */
@@ -124,6 +124,12 @@ a.navigationButton {
   padding: 0 5px;
   display: flex;
   flex-wrap: nowrap;
+  .illustration {
+    color: @navigation;
+    &.greyed {
+      color: @blackGrey;
+    }
+  }
   .text {
     padding-top: 3px;
   }
