@@ -642,6 +642,13 @@ paths:
         explode: true
         schema:
           type: boolean
+      - name: new_color
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
       responses:
         "200":
           description: successful operation
@@ -749,7 +756,7 @@ paths:
         style: form
         explode: true
         schema:
-          type: number
+          type: string
       - name: new_archived
         in: query
         required: false
@@ -1325,6 +1332,7 @@ components:
       - deleted
       - id
       - name
+      - color
       type: object
       properties:
         name:
@@ -1335,6 +1343,8 @@ components:
           type: string
         deleted:
           type: boolean
+        color:
+          type: string
     Category:
       required:
       - archived

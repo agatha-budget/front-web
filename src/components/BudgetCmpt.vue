@@ -43,13 +43,17 @@
           <th class="col-2">{{ addSpacesInThousand(this.totalAvailable) }}</th>
         </thead>
       </table>
+      <btn v-if="!edit" v-on:click="editFunction" class="actionButton edition">{{ $t("EDIT") }}</btn>
+      <btn v-else v-on:click="saveChange" class="actionButton edition">{{ $t("SAVE_CHANGE") }}</btn>
+      <btn v-if="edit" v-on:click="this.createMasterCategory()" class="buttonGradation row">
+        <span class="illustration fas fa-plus col-1"/>
+        <span class="illustrationLabel col-11">{{ $t("ADD_MASTER_CATEGORY") }}</span>
+      </btn>
       <div id="budgetTables">
         <template class="budgetTable table" v-for="masterCategory of this.$store.state.masterCategories" :key="masterCategory" >
-          <master-category-cmpt @update-allocation="updateAllocation" @empty-category="emptyCategory" :masterCategory="masterCategory" :categoryDataList="this.categoryDataList" />
+          <MasterCategoryCmpt @update-allocation="updateAllocation" @empty-category="emptyCategory" @empty-master-category="emptyMasterCategory" :masterCategory="masterCategory" :categoryDataList="this.categoryDataList" :edit="edit"/>
         </template>
         <div class="budget-tools">
-          <div><span type="button" class="actionLabelIcon" v-on:click="this.createMasterCategory()"> > {{ $t("ADD_MASTER_CATEGORY") }}</span></div>
-          <div><span class="tooltiped actionLabelIcon" > > {{ $t("ADD_CATEGORY") }}<span class="tooltiptext">{{ $t("CLICK_ON_THE_MASTER_CATEGORY") }}</span></span></div>
           <div v-on:click="this.archiveVisible = !this.archiveVisible" class="actionLabelIcon">
             <span v-if="this.archiveVisible" type="button" > > {{ $t("HIDE_ARCHIVE") }}</span>
             <span v-else type="button"> > {{ $t("SHOW_ARCHIVE") }}</span>
@@ -58,7 +62,7 @@
         <div v-if="this.archiveVisible" id="archive_section" >
           <div class="title">{{ $t("ARCHIVE") }}</div>
           <template v-for="masterCategory in this.$store.state.masterCategories" :key="masterCategory" >
-            <master-category-cmpt @update-allocation="updateAllocation" @empty-category="emptyCategory" :masterCategory="masterCategory" :categoryDataList="this.categoryDataList" :archived="true" />
+            <MasterCategoryCmpt @update-allocation="updateAllocation" @empty-category="emptyCategory" :masterCategory="masterCategory" :categoryDataList="this.categoryDataList" :edit="edit" :archived="true" />
           </template>
         </div>
       </div>
@@ -77,8 +81,8 @@ import Time from '@/utils/Time'
 import Utils from '@/utils/Utils'
 import MasterCategoryService from '@/services/MasterCategoryService'
 import StoreHandler from '@/store/StoreHandler'
-import BudgetHeader from '@/components/BudgetHeader.vue'
 import PostItService from '@/services/PostItService'
+import BudgetHeader from '@/components/headers/BudgetHeader.vue'
 
 interface BudgetCmptData {
     categoryDataList: CategoryDataList;
@@ -91,6 +95,7 @@ interface BudgetCmptData {
     postItDisplayed: boolean;
     postItEditable: boolean;
     postItContent: string;
+    edit: boolean;
 }
 
 export default defineComponent({
@@ -131,7 +136,8 @@ export default defineComponent({
       archiveVisible: false,
       postItDisplayed: false,
       postItEditable: false,
-      postItContent: 'Bonjour'
+      postItContent: '',
+      edit: false
     }
   },
   computed: {
@@ -239,7 +245,7 @@ export default defineComponent({
       }
     },
     emptyCategory (categoryId: string) {
-      if (this.categoryDataList[categoryId].available !== 0) {
+      if (this.categoryDataList[categoryId] && this.categoryDataList[categoryId].available !== 0) {
         this.categoryDataList[categoryId].allocated -= this.categoryDataList[categoryId].available
         this.formerAllocations[categoryId] -= this.categoryDataList[categoryId].available
         this.categoryDataList[categoryId].available = 0
@@ -267,6 +273,22 @@ export default defineComponent({
         PostItService.updatePostIt(this.budgetMonth, this.budget.id, this.postItContent)
         this.postItDisplayed = false
       }
+    },
+    emptyMasterCategory (masterCategoryId: string) {
+      const masterCategory = StoreHandler.getMasterCategoryById(this.$store, masterCategoryId)
+      if (masterCategory) {
+        const categories = StoreHandler.getCategoriesByMasterCategory(this.$store, masterCategory, false)
+        categories.forEach(category => {
+          this.emptyCategory(category.id)
+        })
+      }
+    },
+    editFunction () {
+      this.edit = !this.edit
+      console.log(this.edit)
+    },
+    saveChange () {
+      this.editFunction()
     }
   }
 })
