@@ -7,6 +7,7 @@ import RedirectToAccountPage from '../views/RedirectToAccountPage.vue'
 import AccountPage from '../views/AccountPage.vue'
 import Subscription from '../views/Subscription.vue'
 import ChartPage from '../views/ChartPage.vue'
+import ChoiceRulesPage from '../views/ChoiceRules.vue'
 import { StoreState } from '@/store/index'
 import { Store } from 'vuex'
 import { AxiosError } from 'axios'
@@ -21,7 +22,8 @@ export enum RouterPages {
   subscription = '/subscription',
   invalidSubscription = '/invalidSubscription',
   redirectToAccountPage = '/redirectToAccountPage',
-  chartPage = '/chart'
+  chartPage = '/chart',
+  choiceRules = '/choiceRules'
 }
 
 const routes: Array<RouteRecordRaw> = [
@@ -70,6 +72,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: RouterPages.chartPage,
     component: ChartPage
+  },
+  {
+    path: RouterPages.choiceRules,
+    component: ChoiceRulesPage
   }
 ]
 

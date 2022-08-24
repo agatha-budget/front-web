@@ -14,6 +14,10 @@
             <span class="illustration fas fa-credit-card col-4"/>
             <span class="illustrationLabel col-8">{{ $t("SUBSCRIPTION") }}</span>
           </btn>
+          <btn class="navigationButton row" v-on:click="goChoiceRulesPage">
+            <span class="illustration fas fa-pencil-ruler col-4"/>
+            <span class="illustrationLabel col-8">{{ $t("CHOICE_RULES") }}</span>
+          </btn>
           <btn class="navigationButton disabled row">
             <span class="illustration fas fa-book-open col-4"/>
             <span class="illustrationLabel col-8">{{ $t("FREE_RESOURCES") }}</span>
@@ -63,6 +67,9 @@ export default defineComponent({
     },
     goSubscriptionPage () {
       router.push(RouterPages.subscription)
+    },
+    goChoiceRulesPage () {
+      router.push(RouterPages.choiceRules)
     }
   }
 })
