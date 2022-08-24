@@ -165,7 +165,6 @@ export default defineComponent({
       })
     },
     setAsEditing (operation: EditableOperation) {
-      console.log(operation.pending)
       operation.editing = true
     },
     operationToEditableOperation (operations: Operation[]): EditableOperation[] {

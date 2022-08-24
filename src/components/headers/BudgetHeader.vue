@@ -2,26 +2,6 @@
     <div id="budgetHeader">
        <!--Calendar-->
       <DateNav :fromPage="'budget'" :money="money" @change-month="changeMonth"/>
-      <table  class="budgetTable">
-        <!-- Table column label-->
-        <thead class="masterCategory collapsed col-6 offset-6">
-          <tr>
-            <th class="col-6"></th>
-            <th class="col-2">{{ $t("ALLOCATED") }}</th>
-            <th class="col-2 spent">{{ $t("SPENT") }}</th>
-            <th class="col-2">{{ $t("AVAILABLE") }}</th>
-          </tr>
-        </thead>
-        <!-- Total for all table-->
-        <thead class="masterCategory collapsed">
-          <tr>
-            <th class="col-6">{{ $t("TOTAL") }}</th>
-            <th class="col-2">{{ addSpacesInThousand(totalAllocated) }}</th>
-            <th class="col-2 spent">{{ addSpacesInThousand(totalSpent) }}</th>
-            <th class="col-2">{{ addSpacesInThousand(totalAvailable) }}</th>
-          </tr>
-        </thead>
-      </table>
     </div>
 </template>
 

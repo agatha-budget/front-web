@@ -1,6 +1,6 @@
 #budgetCmpt {
 
-    // pour toutes les versions
+    // for all versions
 
     background: white;
     overflow-x: hidden; // remove the horizontal elevator
@@ -14,8 +14,46 @@
     }
 
     .content {
-        padding: 0 20px 10px;
+        padding: 10px 20px;
         text-align: center;
+        .flexForm {
+            margin-right: 0.5px;
+            .icon {
+                padding: 14px;
+            }
+            .col-4 {
+                text-align: center;
+                padding: 0;
+            }
+        }
+        .iconPlace {
+            margin: 0;
+            .actionLabelIcon {
+                padding-top: 5px;
+            }
+        }
+        .totalAmount {
+            width: 100%;
+        }
+        .budgetTable {
+            background: @header;
+            .masterCategory {
+                .col-6 {
+                    padding-left: 30px;
+                    text-align: left;
+                }
+                .col-2 {
+                    text-align: center;
+                    padding: 0;
+                }
+                .illustration {
+                    padding-bottom: 8px;
+                }
+            }
+            &.table {
+                background: @background;
+            }
+        }
         .masterCategory {
             .illustration {
                 padding-bottom: 8px;
@@ -107,6 +145,15 @@
     @media (max-width: 500px) {
         .spent, .disappearForMobile {
             display: none;
+        }
+        .iconPlace {
+            width: 60%
+        }
+        .nameColumn {
+            width: 40%;
+            .notDisapear {
+                width: 50%;
+            }
         }
     }
     

@@ -70,6 +70,11 @@
         <span class="cross fas fa-times-circle"/>
       </div>
 
+    <h3>iconButton</h3>
+
+      <button class="btn icon fas fa-paperclip"/>
+      <button class="btn icon greyed fas fa-paperclip"/>
+
     <h3>ActionLabelIcon</h3>
 
       <div class="actionLabelIcon">
@@ -159,6 +164,25 @@
       />
     </div>
 
+    <h3>PostIt Editable</h3>
+    <div class="postIt">
+      <div class="containerCross col-12">
+        <span class="cross fas fa-times-circle"/>
+      </div>
+      <textarea class="textarea"/>
+      <btn class="actionButton">Valider</btn>
+    </div>
+
+    <h3>PostIt Displayed</h3>
+
+    <div class="postIt">
+      <div class="containerCross col-12">
+        <span class="cross fas fa-times-circle"/>
+      </div>
+      <p>Un bloc note pour prendre des notes chaque mois... Bla bla bla bla bla bla bla bla bla pookie ferme la porte ya la pookie dans l’sas</p>
+      <btn class="actionButton">Modifier</btn>
+    </div>
+
     </div>
     <div class="col-md-6">
 
@@ -179,7 +203,7 @@
       <label for="textInput">Number</label>
       <input type="number" class="form-control" id="textInput" placeholder="0">
     </div>
-  </div>
+    </div>
 </div>
 
 <div class="designContainer col-8 offset-2 row">

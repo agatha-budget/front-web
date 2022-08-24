@@ -1,17 +1,62 @@
 <template>
   <div id="budgetCmpt" class="container-fluid col-12 offset-0 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-1 col-xl-5 offset-xl-2">
     <div class="header fixed">
-      <div class="col-12 offset-0 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-12 offset-lg-0">
-        <BudgetHeader :month="this.budgetMonth" :totalAllocated="totalAllocated" :totalSpent="totalSpent" :totalAvailable="totalAvailable" :money="moneyToAllocate"
-        @change-month="changeMonth" />
-      </div>
+      <BudgetHeader :month="this.budgetMonth" :money="moneyToAllocate"
+      @change-month="changeMonth" />
     </div>
     <div class="placeholder top">
-      <BudgetHeader :month="this.budgetMonth" :totalAllocated="totalAllocated" :totalSpent="totalSpent" :totalAvailable="totalAvailable" :money="moneyToAllocate" />
+      <BudgetHeader :month="this.budgetMonth" :money="moneyToAllocate" />
     </div>
+    <!-- Table column label-->
     <div class="content">
-      <btn v-if="!edit" v-on:click="editFunction" class="actionButton edition">{{ $t("EDIT") }}</btn>
-      <btn v-else v-on:click="saveChange" class="actionButton edition">{{ $t("SAVE_CHANGE") }}</btn>
+      <div class="row flexForm">
+          <div class="col-6 iconPlace row">
+          <div v-if="!edit" v-on:click="editFunction" class="actionLabelIcon col-6">
+            <span class="illustration btn fas fa-pen"/>
+            <div class="text">{{ $t("EDIT") }}</div>
+          </div>
+          <div v-else v-on:click="saveChange" class="actionLabelIcon col-6">
+            <span class="illustration greyed btn fas fa-pen"/>
+            <div class="text">{{ $t("SAVE_CHANGE") }}</div>
+          </div>
+          <div v-if="!postItDisplayed" v-on:click="displayPostIt" class="actionLabelIcon col-6">
+            <span class="illustration btn fas fa-paperclip"/>
+            <div class="text">{{ $t("POST-IT") }}</div>
+          </div>
+          <div v-else v-on:click="displayPostIt" class="actionLabelIcon col-6">
+            <span class="illustration btn greyed fas fa-paperclip"/>
+            <div class="text">{{ $t("POST-IT") }}</div>
+          </div>
+        </div>
+        <div class="budgetTable col-6 nameColumn">
+          <tr class="masterCategory collapsed row">
+            <th class="notDisapear col-4">{{ $t("ALLOCATED") }}</th>
+            <th class="spent col-4">{{ $t("SPENT") }}</th>
+            <th class="notDisapear col-4">{{ $t("AVAILABLE") }}</th>
+          </tr>
+        </div>
+      </div>
+      <div v-if="postItDisplayed" class="postIt">
+        <div class="containerCross col-12">
+          <span v-on:click="displayPostIt" class="cross fas fa-times-circle"/>
+        </div>
+        <div v-if="postItEditable"><textarea class="textarea" v-model="postItContent"/>
+          <btn class="actionButton" v-on:click="updatePostIt">{{ $t("SUBMIT") }}</btn>
+        </div>
+        <div v-else>
+          <p>{{ postItContent }}</p>
+          <btn v-on:click="editPostIt" class="actionButton">{{ $t("CHANGE") }}</btn>
+        </div>
+      </div>
+      <!-- Total for all table-->
+      <table class="budgetTable totalAmount">
+        <thead class="masterCategory collapsed">
+          <th class="col-6">{{ $t("TOTAL") }}</th>
+          <th class="col-2">{{ addSpacesInThousand(this.totalAllocated) }}</th>
+          <th class="col-2 spent">{{ addSpacesInThousand(this.totalSpent) }}</th>
+          <th class="col-2">{{ addSpacesInThousand(this.totalAvailable) }}</th>
+        </thead>
+      </table>
       <btn v-if="edit" v-on:click="this.createMasterCategory()" class="buttonGradation row">
         <span class="illustration fas fa-plus col-1"/>
         <span class="illustrationLabel col-11">{{ $t("ADD_MASTER_CATEGORY") }}</span>
@@ -42,12 +87,13 @@
 import { defineComponent } from 'vue'
 import BudgetDataService from '@/services/BudgetDataService'
 import AllocationService from '@/services/AllocationService'
-import { Account, Budget, CategoryData, CategoryDataList, newMasterCategoryName } from '@/model/model'
+import { Account, Budget, CategoryData, CategoryDataList, newMasterCategoryName, PostIt } from '@/model/model'
 import MasterCategoryCmpt from './MasterCategoryCmpt.vue'
 import Time from '@/utils/Time'
 import Utils from '@/utils/Utils'
 import MasterCategoryService from '@/services/MasterCategoryService'
 import StoreHandler from '@/store/StoreHandler'
+import PostItService from '@/services/PostItService'
 import BudgetHeader from '@/components/headers/BudgetHeader.vue'
 
 interface BudgetCmptData {
@@ -58,6 +104,9 @@ interface BudgetCmptData {
     budgetMonth: number;
     amountInBudget: number;
     archiveVisible: boolean;
+    postItDisplayed: boolean;
+    postItEditable: boolean;
+    postItContent: string;
     edit: boolean;
 }
 
@@ -97,6 +146,9 @@ export default defineComponent({
       budgetMonth: this.$props.month,
       amountInBudget: 0,
       archiveVisible: false,
+      postItDisplayed: false,
+      postItEditable: false,
+      postItContent: '',
       edit: false
     }
   },
@@ -210,6 +262,27 @@ export default defineComponent({
         this.formerAllocations[categoryId] -= this.categoryDataList[categoryId].available
         this.categoryDataList[categoryId].available = 0
         AllocationService.updateAllocation(this.budgetMonth, categoryId, this.formerAllocations[categoryId])
+      }
+    },
+    addSpacesInThousand (number: number): string {
+      return Utils.addSpacesInThousand(number)
+    },
+    async displayPostIt () {
+      if (this.budget) {
+        this.postItContent = (await PostItService.getPostIt(this.budgetMonth, this.budget.id)).text
+        this.postItDisplayed = !this.postItDisplayed
+        if (!this.postItDisplayed) {
+          this.postItEditable = false
+        }
+      }
+    },
+    editPostIt () {
+      this.postItEditable = true
+    },
+    updatePostIt () {
+      if (this.budget) {
+        PostItService.updatePostIt(this.budgetMonth, this.budget.id, this.postItContent)
+        this.postItDisplayed = false
       }
     },
     emptyMasterCategory (masterCategoryId: string) {

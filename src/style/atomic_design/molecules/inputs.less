@@ -12,4 +12,30 @@
   display: none;
 }
 
+.postIt {
+  margin-top: 10px;
+  border-radius: @borderRadius;
+  background-color: @grey;
+  padding: 7px 10px 3px;
+  box-shadow: 0 0 0 2px @action; /* this draws the table border  */ 
+  text-align: center;
+  .textarea {
+    margin: 5px 0;
+    padding: 0 2px;
+    width: 100%;
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    resize: both;
+    min-height: 40px;
+    line-height: 20px;
+    background: @background;
+    text-align: left;
+  }
+  p {
+    margin: 5px 0;
+    text-align: justify;
+  }
+}
+
 @import "../../../../node_modules/@vueform/multiselect/themes/default.css";
