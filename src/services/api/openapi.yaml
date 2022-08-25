@@ -1173,7 +1173,7 @@ paths:
   /postIt:
     post:
       tags:
-      - Post it
+      - Post-it
       summary: Add a new post-it or update an existing one
       operationId: updatePostIt
       parameters:
@@ -1244,6 +1244,150 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/PostIt'
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: string
+              example: invalid budget id
+  /categoryIdentifier:
+    post:
+      tags:
+      - CategoryIdentifier
+      summary: add a category identifier
+      operationId: addCategoryIdentifier
+      parameters:
+      - name: budget_id
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: pattern
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: category_id
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryIdentifier'
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: string
+              example: invalid budget id
+    put:
+      tags:
+      - CategoryIdentifier
+      summary: update a category identifier
+      operationId: updateCategoryIdentifier
+      parameters:
+      - name: category_identifier_id
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: pattern
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: category_id
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryIdentifier'
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: string
+              example: invalid category identifier id
+    delete:
+      tags:
+      - CategoryIdentifier
+      summary: delete a category identifier
+      operationId: deleteCategoryIdentifier
+      parameters:
+      - name: category_identifier_id
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+              example: deleted
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: string
+              example: invalid category identifier id
+    get:
+      tags:
+      - CategoryIdentifier
+      summary: get category identifiers from a budget
+      operationId: getCategoryIdentifierFromBudget
+      parameters:
+      - name: budget_id
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryIdentifier'
         "400":
           description: Invalid request
           content:
@@ -1443,6 +1587,19 @@ components:
         budgetId:
           type: string
         text:
+          type: string
+    CategoryIdentifier:
+      required:
+      - budgetId
+      - pattern
+      - categoryId
+      type: object
+      properties:
+        budgetId:
+          type: string
+        pattern:
+          type: string
+        categoryId:
           type: string
   securitySchemes:
     accessToken:

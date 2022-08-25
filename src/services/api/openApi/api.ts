@@ -167,6 +167,31 @@ export interface CategoryData {
 /**
  * 
  * @export
+ * @interface CategoryIdentifier
+ */
+export interface CategoryIdentifier {
+    /**
+     * 
+     * @type {string}
+     * @memberof CategoryIdentifier
+     */
+    'budgetId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CategoryIdentifier
+     */
+    'pattern': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CategoryIdentifier
+     */
+    'categoryId': string;
+}
+/**
+ * 
+ * @export
  * @interface MasterCategory
  */
 export interface MasterCategory {
@@ -1631,6 +1656,360 @@ export class CategoryApi extends BaseAPI {
      */
     public updateCategory(id: string, newName?: string, newMasterCategoryId?: string, newArchived?: boolean, newDeleted?: boolean, options?: AxiosRequestConfig) {
         return CategoryApiFp(this.configuration).updateCategory(id, newName, newMasterCategoryId, newArchived, newDeleted, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * CategoryIdentifierApi - axios parameter creator
+ * @export
+ */
+export const CategoryIdentifierApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary add a category identifier
+         * @param {string} budgetId 
+         * @param {string} pattern 
+         * @param {string} categoryId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addCategoryIdentifier: async (budgetId: string, pattern: string, categoryId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'budgetId' is not null or undefined
+            assertParamExists('addCategoryIdentifier', 'budgetId', budgetId)
+            // verify required parameter 'pattern' is not null or undefined
+            assertParamExists('addCategoryIdentifier', 'pattern', pattern)
+            // verify required parameter 'categoryId' is not null or undefined
+            assertParamExists('addCategoryIdentifier', 'categoryId', categoryId)
+            const localVarPath = `/categoryIdentifier`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (budgetId !== undefined) {
+                localVarQueryParameter['budget_id'] = budgetId;
+            }
+
+            if (pattern !== undefined) {
+                localVarQueryParameter['pattern'] = pattern;
+            }
+
+            if (categoryId !== undefined) {
+                localVarQueryParameter['category_id'] = categoryId;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary delete a category identifier
+         * @param {string} categoryIdentifierId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteCategoryIdentifier: async (categoryIdentifierId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'categoryIdentifierId' is not null or undefined
+            assertParamExists('deleteCategoryIdentifier', 'categoryIdentifierId', categoryIdentifierId)
+            const localVarPath = `/categoryIdentifier`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (categoryIdentifierId !== undefined) {
+                localVarQueryParameter['category_identifier_id'] = categoryIdentifierId;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary get category identifiers from a budget
+         * @param {string} budgetId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCategoryIdentifierFromBudget: async (budgetId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'budgetId' is not null or undefined
+            assertParamExists('getCategoryIdentifierFromBudget', 'budgetId', budgetId)
+            const localVarPath = `/categoryIdentifier`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (budgetId !== undefined) {
+                localVarQueryParameter['budget_id'] = budgetId;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary update a category identifier
+         * @param {string} categoryIdentifierId 
+         * @param {string} [pattern] 
+         * @param {string} [categoryId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateCategoryIdentifier: async (categoryIdentifierId: string, pattern?: string, categoryId?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'categoryIdentifierId' is not null or undefined
+            assertParamExists('updateCategoryIdentifier', 'categoryIdentifierId', categoryIdentifierId)
+            const localVarPath = `/categoryIdentifier`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (categoryIdentifierId !== undefined) {
+                localVarQueryParameter['category_identifier_id'] = categoryIdentifierId;
+            }
+
+            if (pattern !== undefined) {
+                localVarQueryParameter['pattern'] = pattern;
+            }
+
+            if (categoryId !== undefined) {
+                localVarQueryParameter['category_id'] = categoryId;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CategoryIdentifierApi - functional programming interface
+ * @export
+ */
+export const CategoryIdentifierApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CategoryIdentifierApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary add a category identifier
+         * @param {string} budgetId 
+         * @param {string} pattern 
+         * @param {string} categoryId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async addCategoryIdentifier(budgetId: string, pattern: string, categoryId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CategoryIdentifier>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.addCategoryIdentifier(budgetId, pattern, categoryId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary delete a category identifier
+         * @param {string} categoryIdentifierId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteCategoryIdentifier(categoryIdentifierId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteCategoryIdentifier(categoryIdentifierId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary get category identifiers from a budget
+         * @param {string} budgetId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCategoryIdentifierFromBudget(budgetId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CategoryIdentifier>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCategoryIdentifierFromBudget(budgetId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary update a category identifier
+         * @param {string} categoryIdentifierId 
+         * @param {string} [pattern] 
+         * @param {string} [categoryId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateCategoryIdentifier(categoryIdentifierId: string, pattern?: string, categoryId?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CategoryIdentifier>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateCategoryIdentifier(categoryIdentifierId, pattern, categoryId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * CategoryIdentifierApi - factory interface
+ * @export
+ */
+export const CategoryIdentifierApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CategoryIdentifierApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary add a category identifier
+         * @param {string} budgetId 
+         * @param {string} pattern 
+         * @param {string} categoryId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addCategoryIdentifier(budgetId: string, pattern: string, categoryId: string, options?: any): AxiosPromise<Array<CategoryIdentifier>> {
+            return localVarFp.addCategoryIdentifier(budgetId, pattern, categoryId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary delete a category identifier
+         * @param {string} categoryIdentifierId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteCategoryIdentifier(categoryIdentifierId: string, options?: any): AxiosPromise<string> {
+            return localVarFp.deleteCategoryIdentifier(categoryIdentifierId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary get category identifiers from a budget
+         * @param {string} budgetId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCategoryIdentifierFromBudget(budgetId: string, options?: any): AxiosPromise<Array<CategoryIdentifier>> {
+            return localVarFp.getCategoryIdentifierFromBudget(budgetId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary update a category identifier
+         * @param {string} categoryIdentifierId 
+         * @param {string} [pattern] 
+         * @param {string} [categoryId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateCategoryIdentifier(categoryIdentifierId: string, pattern?: string, categoryId?: string, options?: any): AxiosPromise<Array<CategoryIdentifier>> {
+            return localVarFp.updateCategoryIdentifier(categoryIdentifierId, pattern, categoryId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CategoryIdentifierApi - object-oriented interface
+ * @export
+ * @class CategoryIdentifierApi
+ * @extends {BaseAPI}
+ */
+export class CategoryIdentifierApi extends BaseAPI {
+    /**
+     * 
+     * @summary add a category identifier
+     * @param {string} budgetId 
+     * @param {string} pattern 
+     * @param {string} categoryId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CategoryIdentifierApi
+     */
+    public addCategoryIdentifier(budgetId: string, pattern: string, categoryId: string, options?: AxiosRequestConfig) {
+        return CategoryIdentifierApiFp(this.configuration).addCategoryIdentifier(budgetId, pattern, categoryId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary delete a category identifier
+     * @param {string} categoryIdentifierId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CategoryIdentifierApi
+     */
+    public deleteCategoryIdentifier(categoryIdentifierId: string, options?: AxiosRequestConfig) {
+        return CategoryIdentifierApiFp(this.configuration).deleteCategoryIdentifier(categoryIdentifierId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary get category identifiers from a budget
+     * @param {string} budgetId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CategoryIdentifierApi
+     */
+    public getCategoryIdentifierFromBudget(budgetId: string, options?: AxiosRequestConfig) {
+        return CategoryIdentifierApiFp(this.configuration).getCategoryIdentifierFromBudget(budgetId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary update a category identifier
+     * @param {string} categoryIdentifierId 
+     * @param {string} [pattern] 
+     * @param {string} [categoryId] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CategoryIdentifierApi
+     */
+    public updateCategoryIdentifier(categoryIdentifierId: string, pattern?: string, categoryId?: string, options?: AxiosRequestConfig) {
+        return CategoryIdentifierApiFp(this.configuration).updateCategoryIdentifier(categoryIdentifierId, pattern, categoryId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
