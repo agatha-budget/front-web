@@ -25,57 +25,67 @@
           <OperationForm class="operationForm inlineOperationForm container inline" v-if="operation.editing" @update-operation-list="getAccountOperation" @close-update="closeUpdate" :accountId="this.accountId" :operation="operation"/>
           <span v-else class="allOperation operation">
             <div v-if="operation.daughters.length == 0" class="row col-12">
-              <div v-on:click="setAsEditing(operation)" :title="$t('EDIT')" class="row col-9">
-                <div class="lineStart date col-6">
-                  <div>{{ $d(this.getDayAsDate(operation.day), "day") }}</div>
+              <div v-on:click="setAsEditing(operation)" :title="$t('EDIT')" class="row">
+                <div class="row">
+                  <div class="lineStart date col-6">{{ $d(this.getDayAsDate(operation.day), "day") }}</div>
                 </div>
-                <div class="col-6"/>
-                <div class="lineStart category col-6" :class="getClassDependingCategory(operation)">
-                  {{ this.getCategoryById(operation.categoryId)?.name ?? $t("UNKNOWN_CATEGORY") }}
+                <div class="row">
+                  <div class="lineStart category col-6" :class="getClassDependingCategory(operation)">
+                    {{ this.getCategoryById(operation.categoryId)?.name ?? $t("UNKNOWN_CATEGORY") }}
+                  </div>
+                  <div class="amount col-4" :class="this.getClassDependingOnAmount(operation)">
+                    {{ addSpacesInThousand(this.getEurosAmount(operation.amount)) }} €
+                  </div>
+                  <div class="actionbar col-2 row">
+                    <span v-if="filteringCategoryId === null" v-on:click="setAsEditing(operation)" :title="$t('EDIT')" class="action col-4">
+                      <button class="illustration btn fas fa-pen"/>
+                    </span>
+                    <span v-if="filteringCategoryId === null" v-on:click="deleteOperation(operation)" :title="$t('DELETE')" class="action col-4">
+                      <button class="illustration btn fas fa-trash"/>
+                    </span>
+                    <span v-if="operation.pending" v-on:click="debited(operation)" :title="$t('DEBITED')" class="pending col-4">
+                      <button class="illustration btn fas fa-hourglass-half"/>
+                    </span>
+                  </div>
                 </div>
-                <div class="amount col-5 offset-1 col-sm-3 offset-sm-3" :class="this.getClassDependingOnAmount(operation)">
-                  {{ addSpacesInThousand(this.getEurosAmount(operation.amount)) }} €
-                </div>
-              </div>
-              <div v-if="filteringCategoryId === null" v-on:click="setAsEditing(operation)" :title="$t('EDIT')" class="action col-1">
-                <button class="illustration btn fas fa-pen"/>
-              </div>
-              <div v-if="filteringCategoryId === null" v-on:click="deleteOperation(operation)" :title="$t('DELETE')" class="action col-1">
-                <button class="illustration btn fas fa-trash"/>
-              </div>
-              <div v-if="operation.pending" v-on:click="debited(operation)" :title="$t('DEBITED')" class="pending col-1">
-                <button class="illustration btn fas fa-hourglass-half"/>
               </div>
               <div v-on:click="setAsEditing(operation)" :title="$t('EDIT')" class="lineStart memo col-12">{{ operation.memo }}</div>
             </div>
             <div v-else class="row col-12">
-              <div v-on:click="setAsEditing(operation)" :title="$t('EDIT')" class="row col-9">
-                <div class="lineStart date col-6">
-                  <div>{{ $d(this.getDayAsDate(operation.day), "day") }}</div>
+              <div v-on:click="setAsEditing(operation)" :title="$t('EDIT')" class="row">
+                <div class="row">
+                  <div class="lineStart date col-6">
+                    <div>{{ $d(this.getDayAsDate(operation.day), "day") }}</div>
+                  </div>
+                  <div class="amount col-4" :class="this.getClassDependingOnAmount(operation)">
+                    {{ addSpacesInThousand(this.getEurosAmount(operation.amount)) }} €
+                  </div>
+                  <div class="actionbar col-2 row">
+                    <div v-on:click="setAsEditing(operation)" :title="$t('EDIT')" class="action col-4">
+                    <button class="illustration btn fas fa-pen"/>
+                    </div>
+                    <div v-on:click="deleteOperation(operation)" :title="$t('DELETE')" class="action col-4">
+                      <button class="illustration btn fas fa-trash"/>
+                    </div>
+                    <div v-if="operation.pending" v-on:click="debited(operation)" :title="$t('DEBITED')" class="pending col-4">
+                      <button class="illustration btn fas fa-hourglass-half"/>
+                    </div>
+                  </div>
                 </div>
-                <div class="amount col-5 offset-1 col-sm-3 offset-sm-3" :class="this.getClassDependingOnAmount(operation)">
-                  {{ addSpacesInThousand(this.getEurosAmount(operation.amount)) }} €
+              </div>
+              <div class="lineStart memo col-12 row">
+                <div>{{ operation.memo }}</div>
+              </div>
+              <div class="daugthers">
+                <div v-for="daughter in operation.daughters" :key="daughter" class="daughter row col-12">
+                  <div class="lineStart category col-5 offset-1" :class="getClassDependingCategoryDaughter(daughter.categoryId)">
+                    {{ this.getCategoryById(daughter.categoryId)?.name ?? $t("UNKNOWN_CATEGORY") }}
+                  </div>
+                  <div class="daughter amount col-4" :class="this.getClassDependingOnAmount(operation)">
+                    {{ addSpacesInThousand(this.getEurosAmount(daughter.amount)) }} €
+                  </div>
+                  <div class="memo offset-1">{{ (daughter.memo === 'null') ? '' : daughter.memo }}</div>
                 </div>
-                <div class="lineStart memo col-12 row"><div>{{ operation.memo }}</div></div>
-              </div>
-              <div v-on:click="setAsEditing(operation)" :title="$t('EDIT')" class="action col-1">
-                <button class="illustration btn fas fa-pen"/>
-              </div>
-              <div v-on:click="deleteOperation(operation)" :title="$t('DELETE')" class="action col-1">
-                <button class="illustration btn fas fa-trash"/>
-              </div>
-              <div v-if="operation.pending" v-on:click="debited(operation)" :title="$t('DEBITED')" class="pending col-1">
-                <button class="illustration btn fas fa-hourglass-half"/>
-              </div>
-              <div v-for="daughter in operation.daughters" :key="daughter" class="daughter row col-12">
-                <div class="col-1 offset-1 offset-sm-0"><span class="illustration btn fas fa-level-up-alt"/></div>
-                <div class="lineStart category col-5 col-sm-7 col-md-5c ol-lg-4" :class="getClassDependingCategoryDaughter(daughter.categoryId)">
-                  {{ this.getCategoryById(daughter.categoryId)?.name ?? $t("UNKNOWN_CATEGORY") }}
-                </div>
-                <div class="amount col-4 col-lg-2" :class="this.getClassDependingOnAmount(operation)">
-                  {{ addSpacesInThousand(this.getEurosAmount(daughter.amount)) }} €
-                </div>
-                <div class="memo col-10 offset-2 col-sm-11 offset-sm-1">{{ (daughter.memo === 'null') ? '' : daughter.memo }}</div>
               </div>
             </div>
           </span>

@@ -13,6 +13,7 @@
 
     .illustration {
         color: @action;
+        margin-top: 0;
         &.fa-level-up-alt {
             color: @dark;
             transform: rotate(90deg);
@@ -24,11 +25,15 @@
             visibility: hidden;
             padding: 0;
         }
-        &:hover{
+        hover{
             .btn {
                 visibility: visible;
             }
         }
+    }
+
+    .daughter.amount{
+        text-align: left;
     }
 
     .content {
