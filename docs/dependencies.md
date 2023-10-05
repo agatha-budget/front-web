@@ -1,26 +1,12 @@
-{
-  "name": "agatha-budget",
-  "engines": {
-    "node": "18.x"
-  },
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "serve": "export SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve",
-    "build": "export SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build",
-    "buildProd": "sh scripts/add_commithash_to_properties.sh ; export SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build",
-    "test:unit": "export SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service test:unit",
-    "lint": "export SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service lint"
-  },
+
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^6.4.2",
-    "@vueform/multiselect": "^2.3.2",
-    "axios": "^0.21.1",
-    "bootstrap": "^5.3.2",
+    "@fortawesome/fontawesome-free": "^6.4.2", **fontawesome - icons**
+    "@vueform/multiselect": "^2.3.2", **autocomplete for dropdown menu**
+    "axios": "^0.21.1", **http client**
+    "bootstrap": "^5.3.2", 
     "chart.js": "^4.4.0",
-    "core-js": "^3.32.2",
+    "core-js": "^3.32.2", **implement modern standard for older browser**
     "fs-minipass": "^3.0.3",
-    "jest-worker": "^27.5.1",
     "minipass-collect": "^1.0.2",
     "minipass-flush": "^1.0.5",
     "minipass-pipeline": "^1.2.4",
@@ -31,7 +17,7 @@
     "vue-chartjs": "^4.1.1",
     "vue-i18n": "^9.0.0",
     "vue-router": "^4.0.0-0",
-    "vuex": "^4.0.0-0"
+    "vuex": "^4.0.0-0" **state management -> to be replace by Pinia**
   },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.2.5",
