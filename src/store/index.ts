@@ -1,6 +1,5 @@
 import { InjectionKey } from 'vue'
 import { createStore, Store, useStore as baseUseStore } from 'vuex'
-import SuperTokensRequest from 'supertokens-website/axios'
 import { Budget, Account, Category, MasterCategory, Person } from '@/model/model'
 import StoreHandler from './StoreHandler'
 
@@ -19,7 +18,7 @@ export const key: InjectionKey<Store<StoreState>> = Symbol('injectionKey')
 
 export const store = createStore<StoreState>({
   state: {
-    logged: SuperTokensRequest.doesSessionExist(),
+    logged: true, // to be implemented with new authentication system !
     budget: null,
     accounts: [],
     categories: [],
@@ -30,7 +29,7 @@ export const store = createStore<StoreState>({
   },
   mutations: {
     updateLogged (state) {
-      state.logged = SuperTokensRequest.doesSessionExist()
+      state.logged = true // to be implemented with new authentication system !
       if (state.logged) {
         StoreHandler.initStore(store)
       } else {
