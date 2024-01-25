@@ -34,7 +34,7 @@
               </div>
             </td>
             <td class="col-2 spent">
-                {{ centsToEurosDisplay(categoryDataList[category.id]?.spent ?? "") }}
+                <span v-on:click="goToCategorySpentPage(category.id)">{{ centsToEurosDisplay(this.categoryDataList[category.id]?.spent ?? "") }}</span>
             </td>
             <td class="col-2 available">
               <span v-if="categoryDataList[category.id] && categoryDataList[category.id].available != 0" :class="categoryDataList[category.id]?.available < 0 ? 'negative' : ''">
@@ -61,8 +61,6 @@ import CategoryService from '@/services/CategoryService'
 import { useBudgetStore } from '@/stores/budgetStore'
 import Calcul from '@/utils/Calcul'
 import { Color } from '@/utils/Color'
-import Utils from '@/utils/Utils'
-import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'MasterCategoryCmpt',
@@ -89,7 +87,12 @@ export default defineComponent({
       type: Boolean as () => boolean,
       required: false,
       default: false
+    },
+    month: {
+      type: Number,
+      required: true
     }
+
   },
   computed: {
     categories (): Category[] {
@@ -130,6 +133,9 @@ export default defineComponent({
     },
     computeStringToCents (amount: string): number {
       return Calcul.computeStringToCents(amount)
+    },
+    goToCategorySpentPage (categoryId: string) {
+      router.push({ path: RouterPages.categorySpent, query: { categoryId: categoryId, month: this.$props.month } })
     }
   }
 })

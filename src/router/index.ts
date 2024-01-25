@@ -19,7 +19,8 @@ export enum RouterPages {
   subscription = '/subscription',
   invalidSubscription = '/invalidSubscription',
   redirectToAccountPage = '/redirectToAccountPage',
-  chartPage = '/chart'
+  chartPage = '/chart',
+  categorySpent = '/categorySpent'
 }
 
 const routes: Array<RouteRecordRaw> = [
