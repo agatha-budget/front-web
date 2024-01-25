@@ -16,9 +16,9 @@
         <thead class="masterCategory collapsed">
           <tr>
             <th>{{ $t("TOTAL") }}</th>
-            <th class="amountCol">{{ addSpacesInThousand(totalAllocated) }}</th>
-            <th class="amountCol spent">{{ addSpacesInThousand(totalSpent) }}</th>
-            <th class="amountCol">{{ addSpacesInThousand(totalAvailable) }}</th>
+            <th class="amountCol">{{ centsToEurosDisplay(totalAllocated) }}</th>
+            <th class="amountCol spent">{{ centsToEurosDisplay(totalSpent) }}</th>
+            <th class="amountCol">{{ centsToEurosDisplay(totalAvailable) }}</th>
           </tr>
         </thead>
       </table>
@@ -73,8 +73,8 @@ export default defineComponent({
     changeMonth (message: string) {
       this.$emit('changeMonth', message)
     },
-    addSpacesInThousand (number: number): string {
-      return Utils.addSpacesInThousand(number)
+    centsToEurosDisplay (number: number): string {
+      return Utils.centsToEurosDisplay(number)
     }
   }
 })

@@ -16,8 +16,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import AccountService from '@/services/AccountService'
-import Utils from '@/utils/Utils'
 import Calcul from '@/utils/Calcul'
+import { useBudgetStore } from '@/stores/budgetStore'
+
 
 export default defineComponent({
   name: 'AccountCreationForm',
@@ -29,14 +30,15 @@ export default defineComponent({
   },
   computed: {
     amount (): number {
-      return this.entireCalcul(this.amountString)
+      return this.computeStringToCents(this.amountString)
     }
   },
   emits: ['updateAccountList', 'closeForm'],
   methods: {
     createAccount () {
-      if (this.$store.state.budget) {
-        AccountService.createAccount(this.$store, this.$store.state.budget, this.name, Utils.getCentsAmount(this.amount)).then(
+      const budget = useBudgetStore().budget
+      if (budget) {
+        AccountService.createAccount(budget, this.name, this.amount).then(
           () => {
             this.$emit('updateAccountList')
             this.$emit('closeForm')
@@ -44,8 +46,8 @@ export default defineComponent({
         )
       }
     },
-    entireCalcul (amount: string): number {
-      return Calcul.entireCalcul(amount)
+    computeStringToCents (amount: string): number {
+      return Calcul.computeStringToCents(amount)
     },
     closeForm () {
       this.$emit('closeForm')

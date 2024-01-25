@@ -1,19 +1,22 @@
 <template>
   <div id="accountWidget" class="container">
     <div>
-      <span class="subtitle"> {{ $t('TOTAL') }} : {{this.getEurosAmount(this.totalOnAccounts)}} €</span>
+      <span class="subtitle"> {{ $t('SEE_MY_ACCOUNTS') }} </span>
     </div>
     <div class="accountList col-12 offset-0 col-sm-8 offset-sm-2 col-md-12 offset-md-0">
-      <button v-for="account of this.$store.state.accounts" :key="account" class="navigationButton accounts" v-on:click="goToAccountPage(account)">
-        <template v-if="this.fromPage == 'home'">
+      <button v-for="account of accounts" class="navigationButton accounts" v-on:click="goToAccountPage(account)">
+        <template v-if="fromPage == 'home'">
           <div class="name col-10 offset-2 col-xl-8 offset-xl-0 col-xxl-7 offset-xxl-1">{{ account.name }} :</div>
-          <div class="amount col-6 offset-3 col-xl-4 offset-xl-0">{{this.getEurosAmount(account.amount)}}€</div>
+          <div class="amount col-6 offset-3 col-xl-4 offset-xl-0">{{centsToEurosDisplay(account.amount)}}€</div>
         </template>
         <template v-else>
           <div class="name col-7 offset-1">{{ account.name }} :</div>
-          <div class="amount col-4 offset-0">{{this.getEurosAmount(account.amount)}}€</div>
+          <div class="amount col-4 offset-0">{{centsToEurosDisplay(account.amount)}}€</div>
         </template>
       </button>
+    </div>
+    <div>
+      <span class="subtitle"> {{ $t('TOTAL') }} : {{centsToEurosDisplay(totalOnAccounts)}} €</span>
     </div>
     <div class="addAccount">
       <template v-if="!accountCreationFormIsDisplayed">
@@ -27,11 +30,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
 import AccountCreationForm from '@/components/forms/AccountCreationForm.vue'
+import type { Account } from '@/model/model'
 import router, { RouterPages } from '@/router'
-import { Account } from '@/model/model'
+import { useBudgetStore } from '@/stores/budgetStore'
 import Utils from '@/utils/Utils'
+import { defineComponent } from 'vue'
+
 
 interface AccountsWidgetData {
     accountCreationFormIsDisplayed: boolean;
@@ -58,10 +63,13 @@ export default defineComponent({
   computed: {
     totalOnAccounts (): number {
       let total = 0
-      for (const account of this.$store.state.accounts) {
+      for (const account of useBudgetStore().accounts) {
         total += account.amount
       }
       return total
+    },
+    accounts (): Account[] {
+      return useBudgetStore().accounts
     }
   },
   methods: {
@@ -71,12 +79,8 @@ export default defineComponent({
     changeAccountCreationFormDisplay () {
       this.$data.accountCreationFormIsDisplayed = !this.$data.accountCreationFormIsDisplayed
     },
-    getEurosAmount (amount: number): string {
-      const value = Utils.getEurosAmount(amount)
-      return this.addSpacesInThousand(value)
-    },
-    addSpacesInThousand (number: number): string {
-      return Utils.addSpacesInThousand(number)
+    centsToEurosDisplay (amount: number): string {
+      return Utils.centsToEurosDisplay(amount)
     }
   }
 })

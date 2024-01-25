@@ -1,5 +1,5 @@
 <template>
-  <table class="budgetTable table" v-if="this.categories.length > 0">
+  <table class="budgetTable table" v-if="categories.length > 0">
     <MasterCategoryForm v-if="edit" :masterCategory="masterCategory" :archived="archived" @create-category="createCategory" @empty-master-category="emptyMasterCategory"/>
     <thead v-else class="masterCategory" :style=style>
         <tr>
@@ -8,15 +8,15 @@
             <span class="action">
             </span>
           </th>
-          <th class="col-2 amountCol">{{ addSpacesInThousand(getEurosAmount(masterCategoryData.allocated))}}</th>
-          <th class="col-2 amountCol spent">{{ addSpacesInThousand(getEurosAmount(masterCategoryData.spent)) }}</th>
-          <th class="col-2 amountCol"><span :class="masterCategoryData.available < 0 ? 'negative' : ''">
-          {{ addSpacesInThousand(getEurosAmount(masterCategoryData.available)) }}
+          <th class="col-2 amountCol">{{ centsToEurosDisplay(masterCategoryData.allocated)}}</th>
+          <th class="col-2 amountCol spent">{{ centsToEurosDisplay(masterCategoryData.spent) }}</th>
+          <th class="col-2 amountCol available"><span :class="masterCategoryData.available < 0 ? 'negative' : ''">
+          {{ centsToEurosDisplay(masterCategoryData.available) }}
         </span></th>
         </tr>
       </thead>
     <tbody >
-      <template v-for="category of this.categories" :key="category">
+      <template v-for="category of categories" :key="category">
         <CategoryForm class="categoryBudget" v-if="edit" :category="category" @empty-envelope="emptyEnvelope"/>
         <tr v-else class="categoryBudget">
           <td class="col-6 name">
@@ -25,20 +25,20 @@
             </div>
           </td>
           <td class="col-2">
-              <span v-if="archived">{{ getEurosAmount(this.categoryDataList[category.id]?.allocated ?? "") }}</span>
+              <span v-if="archived">{{ centsToEurosDisplay(categoryDataList[category.id]?.allocated) ?? "" }}</span>
               <div v-else class="form-group numberInput">
               <input  type="textInput" class="form-control"
-                v-bind:value="this.getEurosAmount(this.categoryDataList[category.id]?.allocated ?? 0)"
-                v-on:change="updateAllocationOnChange(category.id, this.entireCalcul($event.target.value))"
+                v-bind:value="centsToEurosDisplay(categoryDataList[category.id]?.allocated ?? 0)"
+                v-on:change="updateAllocationOnChange(category.id, computeStringToCents($event.target.value))"
               >
               </div>
             </td>
             <td class="col-2 spent">
-                {{ addSpacesInThousand(getEurosAmount(this.categoryDataList[category.id]?.spent ?? "")) }}
+                {{ centsToEurosDisplay(categoryDataList[category.id]?.spent ?? "") }}
             </td>
-            <td class="col-2">
-              <span v-if="this.categoryDataList[category.id] && this.categoryDataList[category.id].available != 0" :class="this.categoryDataList[category.id]?.available < 0 ? 'negative' : ''">
-              {{ addSpacesInThousand(getEurosAmount(this.categoryDataList[category.id]?.available)) }}
+            <td class="col-2 available">
+              <span v-if="categoryDataList[category.id] && categoryDataList[category.id].available != 0" :class="categoryDataList[category.id]?.available < 0 ? 'negative' : ''">
+              {{ centsToEurosDisplay(categoryDataList[category.id]?.available) }}
             </span>
           </td>
         </tr>
@@ -53,15 +53,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { MasterCategory, CategoryDataList, CategoryData, Category, newCategoryName } from '@/model/model'
-import Utils from '@/utils/Utils'
-import Calcul from '@/utils/Calcul'
-import CategoryService from '@/services/CategoryService'
-import StoreHandler from '@/store/StoreHandler'
 import CategoryForm from '@/components/forms/CategoryForm.vue'
 import MasterCategoryForm from '@/components/forms/MasterCategoryForm.vue'
+import type { Category, CategoryDataList, MasterCategory } from '@/model/model'
+import { CategoryData, newCategoryName } from '@/model/model'
+import CategoryService from '@/services/CategoryService'
+import { useBudgetStore } from '@/stores/budgetStore'
+import Calcul from '@/utils/Calcul'
 import { Color } from '@/utils/Color'
+import Utils from '@/utils/Utils'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'MasterCategoryCmpt',
@@ -92,7 +93,7 @@ export default defineComponent({
   },
   computed: {
     categories (): Category[] {
-      return StoreHandler.getCategoriesByMasterCategory(this.$store, this.masterCategory, this.archived)
+      return useBudgetStore().getCategoriesByMasterCategory(this.masterCategory, this.archived)
     },
     masterCategoryData () {
       const masterCategoryData = new CategoryData()
@@ -108,16 +109,13 @@ export default defineComponent({
     }
   },
   methods: {
-    updateAllocationOnChange (categoryId: string, value: string) {
-      this.$emit('updateAllocation', categoryId, Utils.getCentsAmount(+value))
-    },
-    getEurosAmount (amount: number): number {
-      return Utils.getEurosAmount(amount)
+    updateAllocationOnChange (categoryId: string, value: number) {
+      this.$emit('updateAllocation', categoryId, value)
     },
     createCategory () {
       CategoryService.createCategory(newCategoryName, this.masterCategory).then(
         () => {
-          StoreHandler.updateCategories(this.$store)
+          useBudgetStore().updateCategories()
         }
       )
     },
@@ -127,11 +125,11 @@ export default defineComponent({
     emptyMasterCategory (masterCategoryId: string) {
       this.$emit('emptyMasterCategory', masterCategoryId)
     },
-    addSpacesInThousand (number: number): string {
-      return Utils.addSpacesInThousand(number)
+    centsToEurosDisplay (number: number): string {
+      return Utils.centsToEurosDisplay(number)
     },
-    entireCalcul (amount: string): number {
-      return Calcul.entireCalcul(amount)
+    computeStringToCents (amount: string): number {
+      return Calcul.computeStringToCents(amount)
     }
   }
 })

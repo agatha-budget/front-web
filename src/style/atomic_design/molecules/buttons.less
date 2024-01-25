@@ -1,4 +1,4 @@
-button:hover, btn:hover {
+button:hover, btn:hover, .clickable:hover {
   cursor: pointer;
 }
 
@@ -15,7 +15,7 @@ a.navigationButton {
   text-transform: none;
 }
 .navigationButton {
-  background: @action;
+  background: @navigation;
   border-radius: @btnBorderRadius;
   border:none;
   width: 100%;
@@ -89,7 +89,7 @@ a.navigationButton {
   }
 }
 
-.dualTab, .trialTab {
+.dualTab, .tripleTab {
   button {  
     border: 1px solid @action;
     color: @dark;
@@ -114,6 +114,19 @@ a.navigationButton {
     }
   }
 }
+
+@media (max-width: 767px) {
+  .dualTab, .tripleTab {
+    button { 
+      &.tabLeft, &.tabRight, &.tabCenter {
+        border-radius: 15px;
+        display: block;
+        margin: 10px auto; 
+      }
+    }
+  }
+}
+
 
 .containerCross {
   text-align: right;
@@ -152,7 +165,8 @@ a.navigationButton {
       color: @navigation;
     }
     &:hover {
-      color: @background;
+      background-color: @background;
+      color: @navigation;
     }
 }
 
