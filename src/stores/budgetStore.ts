@@ -22,8 +22,10 @@ export const useBudgetStore = defineStore('budget', {
       this.storeLoaded = false
     },
     async init() {
-      this.budget = await BudgetService.getDefaultBudget()
-      this.onBudgetUpdate()
+      if (this.budget === null) {
+        this.budget = await BudgetService.getDefaultBudget()
+        this.onBudgetUpdate()
+      }
     },
     async onBudgetUpdate() {
       // to be improved in case one of the update fail
