@@ -2,10 +2,10 @@
   <div :class="css">
     <div class="accountPage row">
       <div class="header fixed">
-          <AccountPageHeader :accountId="account.id" :totalAccount="totalAccount" :existingPendingOperation="pendingOperation()" :realAmountOnAccount="realAmount"/>
+          <AccountPageHeader :accountId="accountId" :totalAccount="totalAccount" :existingPendingOperation="pendingOperation()" :realAmountOnAccount="realAmount"/>
       </div>
       <div class="placeholderTop">
-        <AccountPageHeader :accountId="account.id" :totalAccount="totalAccount" :existingPendingOperation="pendingOperation()" :realAmountOnAccount="realAmount"/>
+        <AccountPageHeader :accountId="accountId" :totalAccount="totalAccount" :existingPendingOperation="pendingOperation()" :realAmountOnAccount="realAmount"/>
       </div>
       <div class="content container operationTable table-hover">
         <div class="tripleTab switchOperation">
@@ -225,7 +225,7 @@ export default defineComponent({
         return ''
       }
     },
-    getClassDependingCategory (operation: Operation): string {
+    getClassDependingCategory (operation: Operation | OperationWithDaughters): string {
       return (operation.categoryId === null) ? 'negative' : ''
     },
     getClassDependingCategoryDaughter (categoryId: string): string {
