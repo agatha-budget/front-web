@@ -1,20 +1,20 @@
 <template >
-  <div :class="this.$store.state.css">
+  <div :class="css">
     <div class="accountPage row">
       <div class="operationList">
-        <template v-for="operation in this.operations" :key="operation">
-          <OperationForm v-if="operation.editing" class="operationForm inlineOperationForm container inline"  @update-operation-list="getAccountOperation" @close-update="closeUpdate" :accountId="this.accountId" :operation="operation"/>
+        <template v-for="operation in operations" :key="operation">
+          <OperationForm v-if="operation.editing" class="operationForm inlineOperationForm container inline"  @update-operation-list="getAccountOperation" @close-update="closeUpdate" :accountId="accountId" :operation="operation"/>
           <!-- Operation without daugther -->
           <div v-else-if="operation.daughters.length == 0"  v-on:click="setAsEditing(operation)" class="operationListItem operation row">
               <div class="row">
-                <div class="date col-6">{{ $d(this.getDayAsDate(operation.day), "day") }}</div>
+                <div class="date col-6">{{ $d(getDayAsDate(operation.day), "day") }}</div>
                 <div class="col-1 offset-5"><button class="illustration btn fas fa-pen action" :title="$t('EDIT')" /></div>
               </div>
               <div class="row">
                 <div class="category col-8" :class="getClassDependingCategory(operation)">
-                  {{ this.getCategoryById(operation.categoryId)?.name ?? $t("UNKNOWN_CATEGORY") }}
+                  {{ getCategoryById(operation.categoryId)?.name ?? $t("UNKNOWN_CATEGORY") }}
                 </div>
-                <div class="amount col-3" :class="this.getClassDependingOnAmount(operation.amount)">
+                <div class="amount col-3" :class="getClassDependingOnAmount(operation.amount)">
                   {{ centsToEurosDisplay(operation.amount) }} €
                 </div>
                 <div class="col-1">
@@ -28,14 +28,14 @@
           <!-- Operation with daugther -->
           <div v-else class="operationListItem operation row" v-on:click="setAsEditing(operation)">
             <div class="row">
-              <div class="date col-6">{{ $d(this.getDayAsDate(operation.day), "day") }}</div>
+              <div class="date col-6">{{ $d(getDayAsDate(operation.day), "day") }}</div>
               <div class="col-1 offset-5"><button class="illustration btn fas fa-pen action" :title="$t('EDIT')" /></div>
             </div>
             <div class="row beforeDaughter">
               <div class="memo col-8">
                 {{ operation.memo }}
               </div>
-              <div class="amount col-3" :class="this.getClassDependingOnAmount(operation.amount)">
+              <div class="amount col-3" :class="getClassDependingOnAmount(operation.amount)">
                 {{ centsToEurosDisplay(operation.amount) }} €
               </div>
               <div class="col-1">
@@ -46,9 +46,9 @@
             <template v-for="daughter in operation.daughters" :key="daughter">
               <div class="row daughter">
                 <div class="daughterCategory category col-8" :class="getClassDependingCategoryDaughter(daughter.categoryId)">
-                  {{ this.getCategoryById(daughter.categoryId)?.name ?? $t("UNKNOWN_CATEGORY") }}
+                  {{ getCategoryById(daughter.categoryId)?.name ?? $t("UNKNOWN_CATEGORY") }}
                 </div>
-                <div class="amount col-3" :class="this.getClassDependingOnAmount(daughter.amount)">
+                <div class="amount col-3" :class="getClassDependingOnAmount(daughter.amount)">
                   {{ centsToEurosDisplay(daughter.amount) }} €
                 </div>
               </div>
@@ -58,10 +58,10 @@
         </template>
       </div>
       <div class="placeholder bottom">
-        <NavMenu/>
+        <NavMenu :page="'accounts'" />
       </div>
       <div class="footer fixed">
-        <NavMenu/>
+        <NavMenu :page="'accounts'" />
       </div>
     </div>
   </div>
@@ -69,21 +69,29 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import router, { redirectToLoginPageIfNotLogged, RouterPages } from '@/router'
-import { Account, Budget, Category, Operation, OperationWithDaughters } from '@/model/model'
+import router, { RouterPages } from '@/router'
+import type { Account, Budget, Category, Operation, OperationWithDaughters } from '@/model/model'
 import Time from '@/utils/Time'
-import StoreHandler from '@/store/StoreHandler'
 import OperationService from '@/services/OperationService'
 import OperationForm from '@/components/forms/OperationForm.vue'
 import NavMenu from '@/components/NavigationMenu.vue'
 import AccountPageHeader from '@/components/headers/AccountPageHeader.vue'
 import ImportOfx from '@/components/ImportOfx.vue'
 import FilterCmpt from '@/components/FilterCmpt.vue'
+import { useBudgetStore } from '@/stores/budgetStore'
+import { usePersonStore } from '@/stores/personStore'
 import Utils from '@/utils/Utils'
-import { BudgetApi } from '@/services/api/openApi'
+
+interface EditableOperation extends OperationWithDaughters {
+  editing: boolean;
+}
 
 interface CategorySpentPageData {
-    operations: Operation[];
+    operations: EditableOperation[];
+    importBloc: boolean;
+    manualBloc: boolean;
+    filterBloc: boolean;
+    filteringCategoryId: string | null;
     existingPendingOperation: boolean;
 }
 
@@ -96,11 +104,8 @@ export default defineComponent({
     ImportOfx,
     FilterCmpt
   },
-  beforeCreate: async function () {
-    redirectToLoginPageIfNotLogged(this.$store)
-  },
   created: async function () {
-    StoreHandler.initStore(this.$store)
+    usePersonStore().init()
     this.getCategoryOperaion()
   },
   watch: {
@@ -109,6 +114,10 @@ export default defineComponent({
     }
   },
   props: {
+    accountId: {
+      type: String,
+      required: true
+    },
     budget: {
       type: Object as () => Budget,
       required: true
@@ -129,12 +138,24 @@ export default defineComponent({
   data (): CategorySpentPageData {
     return {
       operations: [],
+      importBloc: false,
+      manualBloc: false,
+      filterBloc: false,
+      filteringCategoryId: null,
       existingPendingOperation: false
     }
   },
   computed: {
+    account (): Account | null {
+      for (const account of useBudgetStore().accounts) {
+        if (account.id === this.accountId) {
+          return account
+        }
+      }
+      return null
+    },
     category (): Category | null {
-      for (const category of this.$store.state.categories) {
+      for (const category of useBudgetStore().categories) {
         if (category.id === this.categoryId) {
           return category
         }
@@ -144,18 +165,21 @@ export default defineComponent({
   },
   methods: {
     async getAccountOperation () {
-      if (this.budget) {
-        return OperationService.getOperationsByCategory(this.budget, this.filteringCategoryId).then(
+      if (this.account) {
+        return OperationService.getOperations(this.account, this.filteringCategoryId).then(
           (operations) => {
             this.operations = this.operationToEditableOperation(operations)
           }
         )
       }
     },
-    async getAccountOperationFilter () {
-      if (this.account) {
-        const filteredOperations = await OperationService.getOperationsByCategory(this.budget, this.filteringCategoryId)
-        this.operations = this.operationToEditableOperation(filteredOperations)
+    async getCategoryOperaion () {
+      if (this.budget) {
+        return OperationService.getOperationsByCategory(this.budget, this.filteringCategoryId).then(
+          (operations) => {
+            this.operations = this.operationToEditableOperation(operations)
+          }
+        )
       }
     },
     getDayAsDate (dayAsInt: number): Date {
@@ -182,7 +206,7 @@ export default defineComponent({
       return editableOperations
     },
     getCategoryById (categoryId: string): Category | null {
-      return StoreHandler.getCategoryById(this.$store, categoryId)
+      return useBudgetStore().getCategoryById(categoryId)
     },
     getClassDependingOnAmount (amount: number): string {
       if (amount > 0) {
@@ -196,10 +220,6 @@ export default defineComponent({
     },
     getClassDependingCategoryDaughter (categoryId: string): string {
       return categoryId === null ? 'negative' : ''
-    },
-    async filter (categoryId: string) {
-      this.filteringCategoryId = categoryId
-      await this.getAccountOperationFilter()
     },
     switchAddOperation (type: string) {
       if (type === 'import') {
@@ -220,10 +240,10 @@ export default defineComponent({
         const daughters = operation.daughters
         if (daughters && daughters.length !== 0) {
           daughters.forEach(daughter => {
-            OperationService.updateOperation(this.$store, daughter.id, this.accountId, undefined, undefined, undefined, undefined, undefined, false)
+            OperationService.updateOperation(daughter.id, this.accountId, undefined, undefined, undefined, undefined, undefined, false)
           })
         }
-        OperationService.updateOperation(this.$store, operation.id, this.accountId, undefined, undefined, undefined, undefined, undefined, false)
+        OperationService.updateOperation(operation.id, this.accountId, undefined, undefined, undefined, undefined, undefined, false)
       }
     },
     pendingOperation (): boolean {
@@ -241,22 +261,8 @@ export default defineComponent({
     closeForm () {
       this.manualBloc = false
     },
-    async closeFilter () {
-      this.filterBloc = false
-      this.filteringCategoryId = null
-      await this.getAccountOperation()
-    },
     closeUpdate (operation: EditableOperation) {
       operation.editing = false
-    },
-    async onClickFilterButton () {
-      this.filterBloc = !this.filterBloc
-      this.manualBloc = false
-      this.importBloc = false
-      if (!this.filterBloc) {
-        this.filteringCategoryId = null
-        await this.getAccountOperation()
-      }
     },
     goToBanksPage () {
       router.push(RouterPages.banks)

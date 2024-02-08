@@ -29,12 +29,12 @@
               <div v-else class="form-group numberInput">
               <input  type="textInput" class="form-control"
                 v-bind:value="centsToEurosDisplay(categoryDataList[category.id]?.allocated ?? 0)"
-                v-on:change="updateAllocationOnChange(category.id, computeStringToCents($event.target.value))"
+                v-on:change="updateAllocationOnChange(category.id, computeStringToCents($event.target?.value))"
               >
               </div>
             </td>
             <td class="col-2 spent">
-                <span v-on:click="goToCategorySpentPage(category.id, this.month, this.categoryDataList[category.id]?.spent)">{{ centsToEurosDisplay(this.categoryDataList[category.id]?.spent ?? "") }}</span>
+                <span v-on:click="goToCategorySpentPage(category.id, categoryDataList[category.id]?.spent)">{{ centsToEurosDisplay(categoryDataList[category.id]?.spent ?? "") }}</span>
             </td>
             <td class="col-2 available">
               <span v-if="categoryDataList[category.id] && categoryDataList[category.id].available != 0" :class="categoryDataList[category.id]?.available < 0 ? 'negative' : ''">
@@ -53,6 +53,7 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue'
 import CategoryForm from '@/components/forms/CategoryForm.vue'
 import MasterCategoryForm from '@/components/forms/MasterCategoryForm.vue'
 import type { Category, CategoryDataList, MasterCategory } from '@/model/model'
@@ -61,6 +62,8 @@ import CategoryService from '@/services/CategoryService'
 import { useBudgetStore } from '@/stores/budgetStore'
 import Calcul from '@/utils/Calcul'
 import { Color } from '@/utils/Color'
+import Utils from '@/utils/Utils'
+import router, { RouterPages } from '@/router'
 
 export default defineComponent({
   name: 'MasterCategoryCmpt',
@@ -134,8 +137,8 @@ export default defineComponent({
     computeStringToCents (amount: string): number {
       return Calcul.computeStringToCents(amount)
     },
-    goToCategorySpentPage (categoryId: string) {
-      router.push({ path: RouterPages.categorySpent, query: { categoryId: categoryId, month: this.$props.month } })
+    goToCategorySpentPage (categoryId: string, spent: number) {
+      router.push({ path: RouterPages.categorySpent, query: { categoryId: categoryId, month: this.$props.month, spent: spent} })
     }
   }
 })

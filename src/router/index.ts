@@ -7,6 +7,7 @@ import HomeView from '@/views/Home.vue';
 import ProfileView from '@/views/Profile.vue';
 import RedirectToAccountPage from '@/views/RedirectToAccountPage.vue';
 import SubscriptionView from '@/views/Subscription.vue';
+import CategorySpentPage from '@/views/CategorySpentPage.vue';
 import { AxiosError } from 'axios';
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
 
@@ -63,7 +64,11 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: RouterPages.chartPage,
     component: ChartsView
-  }
+  },
+  {
+    path: RouterPages.categorySpent,
+    component: CategorySpentPage
+  },
 ]
 
 const router = createRouter({
