@@ -257,7 +257,7 @@ export default defineComponent({
       }
     }
   },
-  emits: ['updateOperationList', 'closeForm', 'closeUpdate'],
+  emits: ['closeForm', 'closeUpdate'],
   methods: {
     daughtersToDaughterData (daughter: Operation): DaughterFormData {
       return {
@@ -270,11 +270,7 @@ export default defineComponent({
     },
     async deleteOperation () {
       if (this.operation) {
-        OperationService.deleteOperation(this.operation.id).then(
-          () => {
-            this.$emit('updateOperationList')
-          }
-        )
+        OperationService.deleteOperation(this.operation.id)
       }
     },
     getCategoriesByMasterCategory (masterCategory: MasterCategory): Category[] {
@@ -363,18 +359,20 @@ export default defineComponent({
         )
         this.saveChangesToDaughters(this.operation.id)
       } else {
-        const motherOperation = await OperationService.addOperation(
+        OperationService.addOperation(
           this.accountId,
           Time.getDayFromDateString(this.date),
           this.categoryId,
           this.signedCentsAmount,
           this.memo,
           this.isPending
+        ).then(
+          (motherOperation) => {
+            this.saveChangesToDaughters(motherOperation.id)
+            this.rebootAddOperationForm()
+          }
         )
-        this.saveChangesToDaughters(motherOperation.id)
-        this.rebootAddOperationForm()
       }
-      this.$emit('updateOperationList')
     },
     saveChangesToDaughters (motherOperationId: string) {
       const preexistingDaughters = (this.operation) ? this.operation.daughters : []

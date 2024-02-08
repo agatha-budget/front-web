@@ -16,7 +16,7 @@
           <button v-else v-on:click="switchAddOperation('import')" class="tabRight">{{ $t("BANK_IMPORT") }}</button>
         </div>
         <ImportOfx v-if="importBloc" :accountId="accountId" @close-import="closeImport"/>
-        <OperationForm v-if="manualBloc" class="operationForm container header" @update-operation-list="getAccountOperation" @close-form="closeForm" :accountId="accountId"/>
+        <OperationForm v-if="manualBloc" class="operationForm container header" @close-form="closeForm" :accountId="accountId"/>
         <div v-on:click="onClickFilterButton" class="actionLabelIcon">
           <span class="illustration btn fas fa-filter"/>
           <div class="text">{{ $t("FILTER") }}</div>
@@ -24,7 +24,7 @@
         <FilterCmpt v-if="filterBloc" @close-filter="closeFilter" @filtering-category="filter"/>
         <div class="operationList">
           <template v-for="operation in operations" :key="operation">
-            <OperationForm v-if="operation.editing" class="operationForm inlineOperationForm container inline"  @update-operation-list="getAccountOperation" @close-update="closeUpdate" :accountId="accountId" :operation="operation"/>
+            <OperationForm v-if="operation.editing" class="operationForm inlineOperationForm container inline" @close-update="closeUpdate" :accountId="accountId" :operation="operation"/>
             <!-- Operation without daugther -->
             <div v-else-if="operation.daughters.length == 0"  v-on:click="setAsEditing(operation)" class="operationListItem operation row">
                 <div class="row">
