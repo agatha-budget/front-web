@@ -1,4 +1,4 @@
-import type { Account, Operation, OperationWithDaughters } from '@/model/model'
+import type { Account, Budget, Operation, OperationWithDaughters } from '@/model/model'
 import { operationApi } from '@/services/api/apis'
 import { useBudgetStore } from '@/stores/budgetStore'
 
@@ -14,6 +14,22 @@ export default class OperationService {
         response = await operationApi.findOperationsByAccount(account.id, categoryId)
       } else {
         response = await operationApi.findOperationsByAccount(account.id, undefined)
+      }
+      data = response.data
+    }
+    return data
+  }
+  public static async getOperationsByCategory(
+    budget: Budget,
+    categoryId: string | null
+  ): Promise<OperationWithDaughters[]> {
+    let data: OperationWithDaughters[] = []
+    if (budget.id) {
+      let response
+      if (categoryId) {
+        response = await operationApi.findOperationsByBudget(budget.id, categoryId)
+      } else {
+        response = await operationApi.findOperationsByBudget(budget.id, undefined)
       }
       data = response.data
     }

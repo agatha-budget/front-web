@@ -34,7 +34,7 @@
               </div>
             </td>
             <td class="col-2 spent">
-                <span v-on:click="goToCategorySpentPage(category.id)">{{ centsToEurosDisplay(this.categoryDataList[category.id]?.spent ?? "") }}</span>
+                <span v-on:click="goToCategorySpentPage(category.id, this.month, this.categoryDataList[category.id]?.spent)">{{ centsToEurosDisplay(this.categoryDataList[category.id]?.spent ?? "") }}</span>
             </td>
             <td class="col-2 available">
               <span v-if="categoryDataList[category.id] && categoryDataList[category.id].available != 0" :class="categoryDataList[category.id]?.available < 0 ? 'negative' : ''">

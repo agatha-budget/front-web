@@ -70,7 +70,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import router, { redirectToLoginPageIfNotLogged, RouterPages } from '@/router'
-import { Account, Category, Operation, OperationWithDaughters } from '@/model/model'
+import { Account, Budget, Category, Operation, OperationWithDaughters } from '@/model/model'
 import Time from '@/utils/Time'
 import StoreHandler from '@/store/StoreHandler'
 import OperationService from '@/services/OperationService'
@@ -80,6 +80,7 @@ import AccountPageHeader from '@/components/headers/AccountPageHeader.vue'
 import ImportOfx from '@/components/ImportOfx.vue'
 import FilterCmpt from '@/components/FilterCmpt.vue'
 import Utils from '@/utils/Utils'
+import { BudgetApi } from '@/services/api/openApi'
 
 interface CategorySpentPageData {
     operations: Operation[];
@@ -108,11 +109,19 @@ export default defineComponent({
     }
   },
   props: {
+    budget: {
+      type: Object as () => Budget,
+      required: true
+    },
     categoryId: {
       type: String,
       required: true
     },
     month: {
+      type: Number,
+      required: true
+    },
+    totalCategoryAmount: {
       type: Number,
       required: true
     }
@@ -131,24 +140,12 @@ export default defineComponent({
         }
       }
       return null
-    },
-    totalCategoryAmount (): number {
-      return (this.account == null) ? 0 : this.account.amount
-    },
-    realCategoryAmount (): number {
-      let value: number = this.account == null ? 0 : this.account.amount
-      this.operations.forEach((operation) => {
-        if (operation.pending === true) {
-          value -= operation.amount
-        }
-      })
-      return value
     }
   },
   methods: {
     async getAccountOperation () {
-      if (this.account) {
-        return OperationService.getOperations(this.account, this.filteringCategoryId).then(
+      if (this.budget) {
+        return OperationService.getOperationsByCategory(this.budget, this.filteringCategoryId).then(
           (operations) => {
             this.operations = this.operationToEditableOperation(operations)
           }
@@ -157,7 +154,7 @@ export default defineComponent({
     },
     async getAccountOperationFilter () {
       if (this.account) {
-        const filteredOperations = await OperationService.getOperations(this.account, this.filteringCategoryId)
+        const filteredOperations = await OperationService.getOperationsByCategory(this.budget, this.filteringCategoryId)
         this.operations = this.operationToEditableOperation(filteredOperations)
       }
     },
