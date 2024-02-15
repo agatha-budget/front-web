@@ -1,7 +1,6 @@
 import KeycloakService from "@/services/security/KeycloakService";
 import AccountView from '@/views/Account.vue';
 import BanksView from '@/views/Banks.vue';
-import ChartsView from '@/views/Charts.vue';
 import HomeView from '@/views/Home.vue';
 import ProfileView from '@/views/Profile.vue';
 import RedirectToAccountPage from '@/views/RedirectToAccountPage.vue';
@@ -52,10 +51,6 @@ const routes: Array<RouteRecordRaw> = [
     path: RouterPages.account,
     component: AccountView,
     props: route => ({ accountId: route.query.accountId })
-  },
-  {
-    path: RouterPages.chartPage,
-    component: ChartsView
   }
 ]
 

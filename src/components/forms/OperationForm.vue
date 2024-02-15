@@ -76,7 +76,7 @@
 
       <hr>
       <p class="formSectionTitle">{{ $t("REPARTITION") }}</p>
-      <div v-for="daughterOperation of daughtersData" :key="daughterOperation" class="flexForm form col-12">
+      <div v-for="daughterOperation of daughtersData" :key="daughterOperation.id" class="flexForm form col-12">
         <div class="containerCross col-12">
           <span class="cross fas fa-trash" v-on:click="removeDaughter(daughterOperation)"/>
         </div>
