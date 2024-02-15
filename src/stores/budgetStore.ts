@@ -3,6 +3,7 @@ import AccountService from '@/services/AccountService'
 import BudgetService from '@/services/BudgetService'
 import CategoryService from '@/services/CategoryService'
 import MasterCategoryService from '@/services/MasterCategoryService'
+import { useOperationStore } from '@/stores/operationStore'
 import { defineStore } from 'pinia'
 
 export const useBudgetStore = defineStore('budget', {
@@ -11,7 +12,6 @@ export const useBudgetStore = defineStore('budget', {
     accounts: [] as Account[],
     categories: [] as Category[],
     masterCategories: [] as MasterCategory[],
-    storeLoaded: false
   }),
   actions: {
     reset() {
@@ -19,7 +19,6 @@ export const useBudgetStore = defineStore('budget', {
       this.accounts = []
       this.masterCategories = []
       this.categories = []
-      this.storeLoaded = false
     },
     async init() {
       if (this.budget === null) {
@@ -34,11 +33,11 @@ export const useBudgetStore = defineStore('budget', {
         this.updateMasterCategories(),
         this.updateCategories()
       ])
-      this.storeLoaded = true
     },
     async updateAccounts() {
       if (this.budget) {
         this.accounts = await AccountService.getAccounts(this.budget)
+        useOperationStore().retrieveOperations(this.accounts)
       }
     },
     async updateCategories() {

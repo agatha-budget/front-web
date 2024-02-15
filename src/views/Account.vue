@@ -91,14 +91,15 @@
 
 <script lang="ts">
 import FilterCmpt from '@/components/FilterCmpt.vue'
-import OperationForm from '@/components/forms/OperationForm.vue'
-import AccountPageHeader from '@/components/headers/AccountPageHeader.vue'
 import ImportOfx from '@/components/ImportOfx.vue'
 import NavMenu from '@/components/NavigationMenu.vue'
+import OperationForm from '@/components/forms/OperationForm.vue'
+import AccountPageHeader from '@/components/headers/AccountPageHeader.vue'
 import type { Account, Category, Operation, OperationWithDaughters } from '@/model/model'
 import router, { RouterPages } from '@/router'
 import OperationService from '@/services/OperationService'
 import { useBudgetStore } from '@/stores/budgetStore'
+import { useOperationStore } from '@/stores/operationStore'
 import { usePersonStore } from '@/stores/personStore'
 import Time from '@/utils/Time'
 import Utils from '@/utils/Utils'
@@ -177,19 +178,16 @@ export default defineComponent({
     }
   },
   methods: {
-    async getAccountOperation () {
+    getAccountOperation () {
       if (this.account) {
-        return OperationService.getOperations(this.account, this.filteringCategoryId).then(
-          (operations) => {
-            this.operations = this.operationToEditableOperation(operations)
-          }
-        )
+        let operations = useOperationStore().getOperationByAccount(this.account.id)
+        this.operations = this.operationToEditableOperation(operations)
       }
     },
-    async getAccountOperationFilter () {
-      if (this.account) {
-        const filteredOperations = await OperationService.getOperations(this.account, this.filteringCategoryId)
-        this.operations = this.operationToEditableOperation(filteredOperations)
+    getAccountOperationFilter () {
+      if (this.account && this.filteringCategoryId) {
+        let operations = useOperationStore().getOperationByAccountAndCategory(this.account.id, this.filteringCategoryId)
+        this.operations = this.operationToEditableOperation(operations)
       }
     },
     getDayAsDate (dayAsInt: number): Date {

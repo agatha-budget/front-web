@@ -1,25 +1,21 @@
 import type { Account, Operation, OperationWithDaughters } from '@/model/model'
 import { operationApi } from '@/services/api/apis'
 import { useBudgetStore } from '@/stores/budgetStore'
+import { ResultAsync } from "neverthrow"
 
 export default class OperationService {
-  public static async getOperations(
-    account: Account,
-    categoryId: string | null
-  ): Promise<OperationWithDaughters[]> {
-    let data: OperationWithDaughters[] = []
-    if (account.id) {
-      let response
-      if (categoryId) {
-        response = await operationApi.findOperationsByAccount(account.id, categoryId)
-      } else {
-        response = await operationApi.findOperationsByAccount(account.id, undefined)
-      }
-      data = response.data
-    }
-    return data
-  }
 
+  public static getOperations(
+    account: Account,
+    categoryId: string | null = null
+  ): ResultAsync<OperationWithDaughters[], Error> {
+    
+    return ResultAsync.fromPromise(
+      operationApi.findOperationsByAccount(account.id, categoryId || undefined),
+      () => Error("error while contacting the DB")
+    ).map((response) => response.data)
+  }
+  
   public static async addOperation(
     accountId: string,
     day?: number,
@@ -81,4 +77,9 @@ export default class OperationService {
     useBudgetStore().updateAccounts()
     return response.data
   }
+
+  public static updateOperationLocally(new_operation: OperationWithDaughters, old_operation: OperationWithDaughters) {
+
+  }
+
 }
