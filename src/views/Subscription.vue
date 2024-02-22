@@ -4,7 +4,13 @@
     <div class="subscriptionPage menuLayout row col-md-4 offset-md-4 col-xl-8 offset-xl-2">
       <div class="header title">
         <h1 class="title">{{ $t('SUBSCRIPTION') }}</h1>
-        <p v-if="!validSubscription" class="col-12">{{ $t('TRIAL_PERIOD_IS_OVER') }}</p>
+        <div v-if="!validSubscription">
+          <p>{{ $t('TRIAL_PERIOD_IS_OVER') }}</p>
+          <button class="navigationButton row" v-on:click="logout">
+            <span class="illustration fas fa-sign-out-alt col-4"/>
+            <span class="illustrationLabel col-8">{{ $t("LOGOUT") }}</span>
+          </button>
+        </div>
       </div>
       <div v-if="managementPage">
         <p>{{ $t('MANAGE_SUBSCRIPTION') }} : </p>
@@ -88,6 +94,7 @@
 import NavMenu from '@/components/NavigationMenu.vue'
 import type { Person } from '@/model/model'
 import PersonService from '@/services/PersonService'
+import KeycloakService from '@/services/security/KeycloakService'
 import { useBudgetStore } from '@/stores/budgetStore'
 import { usePersonStore } from '@/stores/personStore'
 import { defineComponent } from 'vue'
@@ -144,7 +151,10 @@ export default defineComponent({
     },
     changePage () {
       this.managementPage = !this.managementPage
-    }
+    },
+    logout () {
+      KeycloakService.CallLogOut();
+    },
   }
 })
 </script>
