@@ -12,7 +12,7 @@ externalDocs:
   description: Find out more about Agatha-Budget
   url: https://agatha-budget.fr
 servers:
-- url: http://localhost:7000/
+- url: http://localhost:8000/
   description: local
 - url: https://virtserver.swaggerhub.com/ermoca/Agatha/3.0.0
   description: SwaggerHub API Auto Mocking
