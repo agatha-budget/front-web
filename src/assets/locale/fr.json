@@ -156,5 +156,8 @@
     "TO_SHARE":"à répartir",
     "REPARTITION":"Répartition",
     "SEE_MY_ACCOUNTS":"Consulter mes comptes :",
-    "CUSTOMIZE_CATEGORY":"Personnaliser les enveloppes"
+    "CUSTOMIZE_CATEGORY":"Personnaliser les enveloppes",
+    "I18N_TRASNFERT" : "Transfert",
+    "MAX_DISPLAYED" : "{max} opérations affichées",
+    "DISPLAY_MORE" : "Voir plus d'opérations"
 }

@@ -309,7 +309,7 @@ export default defineComponent({
     },
     closeForm () {
       if (this.operation) {
-        this.$emit('closeUpdate', this.operation)
+        this.$emit('closeUpdate')
       }
       this.$emit('closeForm')
     },
@@ -367,9 +367,12 @@ export default defineComponent({
           this.memo,
           this.isPending
         ).then(
-          (motherOperation) => {
-            this.saveChangesToDaughters(motherOperation.id)
-            this.rebootAddOperationForm()
+          (res) => {
+            if (res.isOk()){
+              let motherOperation = res.value
+              this.saveChangesToDaughters(motherOperation.id)
+              this.rebootAddOperationForm()
+            }
           }
         )
       }
