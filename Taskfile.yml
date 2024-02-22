@@ -10,6 +10,9 @@ tasks:
   run:
     cmds:
       - sh ./scripts/set_dev_properties.sh; vite
+  test:
+    cmds:
+      - jest
   build:
     cmds:
       - run-p type-check \"build-only {@}\" --
