@@ -177,7 +177,7 @@ export default defineComponent({
       const storeOperations = (this.filteringCategoryId === null)
         ? useOperationStore().getOperationByAccount(this.accountId)
         : useOperationStore().getOperationByAccountAndCategory(this.accountId, this.filteringCategoryId)
-      const toDisplayOperations = storeOperations.splice(0, this.maxDisplayed)
+      const toDisplayOperations = storeOperations.slice(0, this.maxDisplayed)
       return toDisplayOperations
     },
     storeLoaded (): boolean {
