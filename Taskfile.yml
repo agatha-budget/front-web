@@ -1,0 +1,23 @@
+version: '3'
+
+tasks:
+  default:
+    cmds:
+      - task --list-all
+  hello:
+    cmds:
+      - echo "Bonjour à vous mes très chers amis !"
+  run:
+    cmds:
+      - sh ./scripts/set_dev_properties.sh; vite
+  build:
+    cmds:
+      - run-p type-check \"build-only {@}\" --
+  build_for_beta:
+    cmds:
+      - sh ./scripts/set_beta_properties.sh
+      - task: build
+  build_for_prod:
+    cmds:
+      - sh ./scripts/set_prod_properties.sh
+      - task: build
