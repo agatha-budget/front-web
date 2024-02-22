@@ -36,18 +36,27 @@ export const useBudgetStore = defineStore('budget', {
     },
     async updateAccounts() {
       if (this.budget) {
-        this.accounts = await AccountService.getAccounts(this.budget)
+        let res = await AccountService.getAccounts(this.budget)
+        if (res.isOk()) {
+          this.accounts = res.value
+        }
         useOperationStore().retrieveOperations(this.accounts)
       }
     },
     async updateCategories() {
       if (this.budget) {
-        this.categories = await CategoryService.getCategories(this.budget)
+        let res = await CategoryService.getCategories(this.budget)
+        if (res.isOk()) {
+          this.categories = res.value
+        }
       }
     },
     async updateMasterCategories() {
       if (this.budget) {
-        this.masterCategories = await MasterCategoryService.getMasterCategories(this.budget)
+        let res = await MasterCategoryService.getMasterCategories(this.budget)
+        if (res.isOk()) {
+          this.masterCategories = res.value
+        }
       }
     },
     getOrderedMasterCategory(): MasterCategory[] {

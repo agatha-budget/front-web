@@ -2,11 +2,7 @@
 
   <div :class="css">
     <div class="subscriptionPage menuLayout row col-md-4 offset-md-4 col-xl-8 offset-xl-2">
-      <div class="header fixed title">
-        <h1 class="title">{{ $t('SUBSCRIPTION') }}</h1>
-        <p v-if="!validSubscription" class="col-12">{{ $t('TRIAL_PERIOD_IS_OVER') }}</p>
-      </div>
-      <div class="placeholder top">
+      <div class="header title">
         <h1 class="title">{{ $t('SUBSCRIPTION') }}</h1>
         <p v-if="!validSubscription" class="col-12">{{ $t('TRIAL_PERIOD_IS_OVER') }}</p>
       </div>
@@ -89,12 +85,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
 import NavMenu from '@/components/NavigationMenu.vue'
-import PersonService from '@/services/PersonService'
 import type { Person } from '@/model/model'
-import { usePersonStore } from '@/stores/personStore'
+import PersonService from '@/services/PersonService'
 import { useBudgetStore } from '@/stores/budgetStore'
+import { usePersonStore } from '@/stores/personStore'
+import { defineComponent } from 'vue'
 
 
 interface SubscriptionPageData {
