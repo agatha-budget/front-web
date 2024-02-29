@@ -375,9 +375,7 @@ export default defineComponent({
         const amountCent = this.getSignedCentsAmount(daughter.incoming, daughter.amountString)
 
         // update an existing daughter
-        console.log(daughter)
         if (this.isPresent(daughter.id, preexistingDaughters)) {
-          console.log("update")
           const removeCategory = (daughter.categoryId === undefined || daughter.categoryId === null)
           OperationService.updateOperation(
             daughter.id,
@@ -391,7 +389,6 @@ export default defineComponent({
           )
         // create new daughter
         } else {
-          console.log("create")
           OperationService.addOperation(
             this.accountId,
             Time.getDayFromDateString(this.date),
@@ -406,8 +403,6 @@ export default defineComponent({
 
       // delete preexisting daughter
       preexistingDaughters.forEach(daughter => {
-        console.log(daughter)
-        console.log("delete")
         if (this.operation) {
           // former daughter is not the the new list of daughter of the form
           if (!this.isPresent(daughter.id, this.daughtersData)) {
