@@ -69,8 +69,9 @@ export const useOperationStore = defineStore('operation', {
       let daugthers = this.operations[operation.accountId][index].daughters
       let operationWithDaughters = operationToOperationWithDaughter(operation)
       operationWithDaughters.daughters = daugthers
-      if (index > 0) {
+      if (index >= 0) {
         this.operations[operation.accountId].splice(index, 1, operationWithDaughters)
+
       }    
     },
     updateDaughterOperation(operation: Operation) {
@@ -94,7 +95,7 @@ export const useOperationStore = defineStore('operation', {
     },
     deleteOperationInAccount(accountId: string, operationId: string) {
       const index = this.getOperationIndex(operationId, this.operations[accountId])
-      if (index > 0) {
+      if (index >= 0) {
         this.operations[accountId].splice(index, 1)
       }
     },
