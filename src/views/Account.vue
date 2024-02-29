@@ -106,7 +106,6 @@ import AccountPageHeader from '@/components/headers/AccountPageHeader.vue';
 import Loader from '@/components/utils/Loader.vue';
 import type { Account, Category, Operation, OperationWithDaughters } from '@/model/model';
 import router, { RouterPages } from '@/router';
-import OperationService from '@/services/OperationService';
 import { useBudgetStore } from '@/stores/budgetStore';
 import { useOperationStore } from '@/stores/operationStore';
 import { usePersonStore } from '@/stores/personStore';
@@ -223,17 +222,6 @@ export default defineComponent({
         }
       }
       this.filterBloc = false
-    },
-    async debited (operation: OperationWithDaughters) {
-      if (operation && this.account) {
-        const daughters = operation.daughters
-        if (daughters && daughters.length !== 0) {
-          daughters.forEach(daughter => {
-            OperationService.updateOperation(daughter.id, this.accountId, undefined, undefined, undefined, undefined, undefined, false)
-          })
-        }
-        OperationService.updateOperation(operation.id, this.accountId, undefined, undefined, undefined, undefined, undefined, false)
-      }
     },
     pendingOperation (): boolean {
       let operationPending = false
