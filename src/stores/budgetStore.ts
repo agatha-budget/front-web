@@ -34,13 +34,15 @@ export const useBudgetStore = defineStore('budget', {
         this.updateCategories()
       ])
     },
-    async updateAccounts() {
+    async updateAccounts(withOperation: boolean = true) {
       if (this.budget) {
         let res = await AccountService.getAccounts(this.budget)
         if (res.isOk()) {
           this.accounts = res.value
         }
-        useOperationStore().retrieveOperations(this.accounts)
+        if (withOperation){
+          useOperationStore().retrieveOperations(this.accounts)
+        }
       }
     },
     async updateCategories() {

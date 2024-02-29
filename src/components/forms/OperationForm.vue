@@ -272,7 +272,13 @@ export default defineComponent({
     },
     async deleteOperation () {
       if (this.operation) {
-        OperationService.deleteOperation(this.operation.accountId, this.operation.id)
+        OperationService.deleteOperation(this.operation.accountId, this.operation.id).then(
+          (res) => {
+            if (res.isOk()){
+              useBudgetStore().updateAccounts(false)
+            }
+          }
+        )
       }
     },
     getCategoriesByMasterCategory (masterCategory: MasterCategory): Category[] {
@@ -334,11 +340,11 @@ export default defineComponent({
             if (res.isOk()){
               let motherOperation = res.value
               this.saveChangesToDaughters(motherOperation.id)
+              useBudgetStore().updateAccounts(false)
             }
           }
         )
       this.rebootAddOperationForm()
-          // don't close manual creation form after creation
     },
     updateOperation(operation: OperationWithDaughters) {
       // no category for mother operation if it has daughter (overriding if needed)
@@ -358,6 +364,7 @@ export default defineComponent({
         (res) => {
           if (res.isOk()){
             this.saveChangesToDaughters(operation.id)
+            useBudgetStore().updateAccounts(false)
           }
         }
       )
