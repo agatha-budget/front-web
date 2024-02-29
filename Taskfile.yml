@@ -24,3 +24,6 @@ tasks:
     cmds:
       - sh ./scripts/set_prod_properties.sh
       - task: build
+  apigen:
+    cmds:
+      - openapi-generator-cli generate -g typescript-axios -i src/services/api/openapi.yaml -o src/services/api/openApi
