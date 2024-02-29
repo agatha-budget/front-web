@@ -115,19 +115,19 @@
       </div>
     </div>
     <div class="col-12">  <!-- Add Daugther Action -->
-      <btn v-if="daughtersData.length == 0" class="actionButton" v-on:click="addDaughter">{{ $t('CREATE_DAUGTHERS') }}</btn>
-      <btn v-else class="actionButton" v-on:click="addDaughter">{{ $t('ADD_NEW_DAUGHTER') }}</btn>
+      <button v-if="daughtersData.length == 0" class="actionButton" v-on:click="addDaughter">{{ $t('CREATE_DAUGTHERS') }}</button>
+      <button v-else class="actionButton" v-on:click="addDaughter">{{ $t('ADD_NEW_DAUGHTER') }}</button>
     </div>
     <div class="col-12 row formAction" v-if="operation"> <!-- Update/Delete Action -->
       <div class="col-6">
-        <btn  class="actionButton" v-on:click="updateOperation(operation)" :title="$t('UPDATE')">{{ $t('SUBMIT') }}</btn>
+        <button  class="actionButton" v-on:click="updateOperation(operation)" :title="$t('UPDATE')">{{ $t('SUBMIT') }}</button>
       </div>
       <div class="col-6">
-        <btn class="actionButton" :title="$t('DELETE')" v-on:click="deleteOperation">{{ $t('DELETE') }}</btn>
+        <button class="actionButton" :title="$t('DELETE')" v-on:click="deleteOperation">{{ $t('DELETE') }}</button>
       </div>
     </div>
     <div v-else class="col-12 formAction"> <!-- Create Action -->
-      <btn  class="actionButton" v-on:click="createOperation()" :title="$t('ADD')">{{ $t('SUBMIT') }}</btn>
+      <button  class="actionButton" v-on:click="createOperation()" :title="$t('ADD')">{{ $t('SUBMIT') }}</button>
     </div>
   </div>
 </template>
@@ -334,14 +334,11 @@ export default defineComponent({
             if (res.isOk()){
               let motherOperation = res.value
               this.saveChangesToDaughters(motherOperation.id)
-              this.rebootAddOperationForm()
             }
           }
         )
-        if (this.operation) {
+      this.rebootAddOperationForm()
           // don't close manual creation form after creation
-          this.$emit('closeUpdate')
-        }
     },
     updateOperation(operation: OperationWithDaughters) {
       // no category for mother operation if it has daughter (overriding if needed)
@@ -418,6 +415,15 @@ export default defineComponent({
         }
       }
       return false
+    },
+    rebootAddOperationForm () {
+      this.date = Time.getCurrentDateString()
+      this.isPending = false
+      this.memo = undefined
+      this.categoryId = undefined
+      this.incoming = false
+      this.amountString = Utils.centsToEurosDisplay(Math.abs(0))
+      this.daughtersData = []
     },
     getSignedCentsAmount (incoming: boolean, amountString: string): number {
       const amount = this.computeStringToCents(amountString)

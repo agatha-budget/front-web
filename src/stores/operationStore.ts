@@ -80,9 +80,6 @@ export const useOperationStore = defineStore('operation', {
           if (index >= 0) {
             op.daughters.splice(index, 1, operation)
           } else {
-            console.log(operation)
-            console.log(op.daughters)
-            console.log(index)
             alert(`Une erreur a eu lieu lors de la mise à jour de l'opération ${operation.memo}. Nous vous conseillons de recharger la page`)
           }
         }
