@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.0.2
 info:
   title: Agatha
   description: Agatha api webfront to back
@@ -11,7 +11,7 @@ externalDocs:
   description: Find out more about Agatha-Budget
   url: https://agatha-budget.fr
 servers:
-- url: http://localhost:8000/
+  - url: http://localhost:7000/
     description: local
   - url: https://virtserver.swaggerhub.com/ermoca/Agatha/3.0.0
     description: SwaggerHub API Auto Mocking
@@ -31,7 +31,7 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [Hello Sunshine]
+                example: [Hello Sunshine]
   /error:
     get:
       tags:
@@ -45,7 +45,7 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [Why]
+                example: [Why]
   /ping:
     get:
       tags:
@@ -59,7 +59,7 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [Env]
+                example: [Env]
   /keycloak:
     get:
       tags:
@@ -73,7 +73,7 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [User profile]
+                example: [User profile]
       security:
         - openId:
           - profile
@@ -119,14 +119,14 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [the submitted user has been created]
+                example: [the submitted user has been created]
         '400':
           description: an error occured
           content:
             application/json:
               schema:
                 type: string
-                examples: [the email is already registered]
+                example: [the email is already registered]
   /person:
     get:
       tags:
@@ -179,7 +179,7 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [the submitted user has been updated]
+                example: [the submitted user has been updated]
       security:
         - openId:
           - profile
@@ -217,7 +217,7 @@ paths:
               explode: false
               schema:
                 type: string
-                examples: [
+                example: [
                   sAccessToken=eyJhbGciOiJS5ZTKe6wWrz4zpe%2B5UCv07sdzTwrBn4gtPbppM%2BCTk7PwhBaQ%2Bi0wayui9VHfQ%3D%3D;
                   Path=/; Expires=Thu, 14-Jan-2021 11:55:08 GMT; Max-Age=3600;
                   HttpOnly; SameSite=Lax]
@@ -226,7 +226,7 @@ paths:
               explode: false
               schema:
                 type: string
-                examples: [
+                example: [
                   sIdRefreshToken=4a441a0a-f888-05dd4c6f14be; Path=/;
                   Expires=Sat, 24-Apr-2021 10:55:08 GMT; Max-Age=8640000;
                   HttpOnly; SameSite=Lax]
@@ -235,7 +235,7 @@ paths:
               explode: false
               schema:
                 type: string
-                examples: [
+                example: [
                   sRefreshToken=B290X8kOrDOnDIFJR%2FqLgHu1vHFKoU5d93fa5c58964916b014577f97a9022ea044.V2;
                   Path=/session/refresh; Expires=Sat, 24-Apr-2021 10:55:08 GMT;
                   Max-Age=8640000; HttpOnly; SameSite=Lax]
@@ -243,14 +243,14 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [user_id]
+                example: [user_id]
         '400':
           description: login failed
           content:
             application/json:
               schema:
                 type: string
-                examples: [invalid password/login combination]
+                example: [invalid password/login combination]
   /logout:
     delete:
       tags:
@@ -264,14 +264,14 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [the submitted user has been unlogged]
+                example: [the submitted user has been unlogged]
         '400':
           description: an error occured
           content:
             application/json:
               schema:
                 type: string
-                examples: [no session to revoke]
+                example: [no session to revoke]
       security:
         - openId:
           - profile
@@ -299,14 +299,14 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [url of the portal]
+                example: [url of the portal]
         '400':
           description: unknown user
           content:
             application/json:
               schema:
                 type: string
-                examples: [no billing to manage]
+                example: [no billing to manage]
       security:
         - openId:
           - profile
@@ -355,14 +355,14 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [url of the portal]
+                example: [url of the portal]
         '400':
           description: unknown user
           content:
             application/json:
               schema:
                 type: string
-                examples: [no billing to manage]
+                example: [no billing to manage]
       security:
         - openId:
           - profile
@@ -387,14 +387,14 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [successfull operation]
+                example: [successfull operation]
         '400':
           description: unknown user
           content:
             application/json:
               schema:
                 type: string
-                examples: [no billing to manage]
+                example: [no billing to manage]
       security:
         - openId:
           - profile
@@ -457,14 +457,14 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [successfull import of transaction]
+                example: [successfull import of transaction]
         '400':
           description: unknown user
           content:
             application/json:
               schema:
                 type: string
-                examples: [no billing to manage]
+                example: [no billing to manage]
       security:
         - openId:
           - profile
@@ -480,8 +480,8 @@ paths:
           content:
             application/json:
               schema:
-                type: String
-                examples: ["Success"]
+                type: string
+                example: ["Success"]
   /budget:
     put:
       tags:
@@ -512,14 +512,14 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [budget was successfully updated]
+                example: [budget was successfully updated]
         '400':
           description: Invalid request
           content:
             application/json:
               schema:
                 type: string
-                examples: [invalid user id]
+                example: [invalid user id]
     post:
       tags:
         - Budget
@@ -549,14 +549,14 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [budget was successfully created]
+                example: [budget was successfully created]
         '400':
           description: Invalid request
           content:
             application/json:
               schema:
                 type: string
-              examples:
+              example:
                 a:
                   summary: invalid user
                   value: invalid user id
@@ -587,14 +587,14 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [budget was successfully deleted]
+                example: [budget was successfully deleted]
         '400':
           description: Invalid request
           content:
             application/json:
               schema:
                 type: string
-                examples: [invalid user id]
+                example: [invalid user id]
   /budget/user:
     get:
       tags:
@@ -616,7 +616,7 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [invalid user id]
+                example: [invalid user id]
   /budget/data:
     get:
       tags:
@@ -633,7 +633,7 @@ paths:
             type: string
         - name: start_month
           in: query
-          description: 'examples : mars 2020 = 202003'
+          description: 'example : mars 2020 = 202003'
           required: false
           style: form
           explode: true
@@ -641,7 +641,7 @@ paths:
             type: number
         - name: end_month
           in: query
-          description: 'examples : mars 2020 = 202003'
+          description: 'example : mars 2020 = 202003'
           required: false
           style: form
           explode: true
@@ -660,7 +660,7 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [invalid budget id]
+                example: [invalid budget id]
   /budget/amount:
     get:
       tags:
@@ -677,7 +677,7 @@ paths:
             type: string
         - name: month
           in: query
-          description: 'examples : mars 2020 = 202003'
+          description: 'example : mars 2020 = 202003'
           required: false
           style: form
           explode: true
@@ -696,7 +696,7 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [invalid budget id]
+                example: [invalid budget id]
   /account:
     put:
       tags:
@@ -725,7 +725,7 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [account was successfully updated]
+                example: [account was successfully updated]
         '400':
           description: Invalid request
           content:
@@ -783,14 +783,14 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [account was successfully created]
+                example: [account was successfully created]
         '400':
           description: Invalid request
           content:
             application/json:
               schema:
                 type: string
-                examples: [invalid budget id]
+                example: [invalid budget id]
     delete:
       tags:
         - Account
@@ -812,14 +812,14 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [account was successfully deleted]
+                example: [account was successfully deleted]
         '400':
           description: Invalid request
           content:
             application/json:
               schema:
                 type: string
-                examples: [invalid account id]
+                example: [invalid account id]
   /account/bank:
     put:
       tags:
@@ -856,14 +856,14 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [account was successfully updated]
+                example: [account was successfully updated]
         '400':
           description: Invalid request
           content:
             application/json:
               schema:
                 type: string
-              examples:
+              example:
                 a:
                   summary: invalid account
                   value: invalid account id
@@ -900,7 +900,7 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [invalid budget id]
+                example: [invalid budget id]
   /mcategory:
     put:
       tags:
@@ -950,14 +950,14 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [master category was successfully created]
+                example: [master category was successfully created]
         '400':
           description: Invalid request
           content:
             application/json:
               schema:
                 type: string
-                examples: [invalid budget id]
+                example: [invalid budget id]
     post:
       tags:
         - Master category
@@ -985,14 +985,14 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [master category was successfully created]
+                example: [master category was successfully created]
         '400':
           description: Invalid request
           content:
             application/json:
               schema:
                 type: string
-                examples: [invalid budget id]
+                example: [invalid budget id]
   /mcategory/budget:
     get:
       tags:
@@ -1022,7 +1022,7 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [invalid budget id]
+                example: [invalid budget id]
   /category:
     put:
       tags:
@@ -1072,14 +1072,14 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [category was successfully updated]
+                example: [category was successfully updated]
         '400':
           description: Invalid request
           content:
             application/json:
               schema:
                 type: string
-                examples: [invalid category id]
+                example: [invalid category id]
     post:
       tags:
         - Category
@@ -1107,14 +1107,14 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [category was successfully created]
+                example: [category was successfully created]
         '400':
           description: Invalid request
           content:
             application/json:
               schema:
                 type: string
-                examples: [invalid master category id]
+                example: [invalid master category id]
   /category/budget:
     get:
       tags:
@@ -1144,7 +1144,7 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [invalid budget id]
+                example: [invalid budget id]
   /operation:
     put:
       tags:
@@ -1229,7 +1229,7 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [invalid operation id]
+                example: [invalid operation id]
     post:
       tags:
         - Operation
@@ -1299,7 +1299,7 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [invalid account id]
+                example: [invalid account id]
     delete:
       tags:
         - Operation
@@ -1321,14 +1321,14 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [operation was successfully deleted]
+                example: [operation was successfully deleted]
         '400':
           description: Invalid request
           content:
             application/json:
               schema:
                 type: string
-                examples: [invalid operation id]
+                example: [invalid operation id]
   /operation/account:
     get:
       tags:
@@ -1367,7 +1367,7 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [invalid account id]
+                example: [invalid account id]
   /operation/budget:
     get:
       tags:
@@ -1406,7 +1406,7 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [invalid budget id]
+                example: [invalid budget id]
   /operation/import:
     post:
       tags:
@@ -1434,14 +1434,14 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [operation was successfully created]
+                example: [operation was successfully created]
         '400':
           description: invalid request
           content:
             application/json:
               schema:
                 type: string
-                examples: [invalid file]
+                example: [invalid file]
   /allocation:
     post:
       tags:
@@ -1484,7 +1484,7 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [invalid category id]
+                example: [invalid category id]
   /postIt:
     post:
       tags:
@@ -1521,14 +1521,14 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [post-it was correctly updated]
+                example: [post-it was correctly updated]
         '400':
           description: Invalid request
           content:
             application/json:
               schema:
                 type: string
-                examples: [invalid budget id]
+                example: [invalid budget id]
     get:
       tags:
         - Post-it
@@ -1565,7 +1565,7 @@ paths:
             application/json:
               schema:
                 type: string
-                examples: [invalid budget id]
+                example: [invalid budget id]
 components:
   schemas:
     Budget:
@@ -1709,6 +1709,11 @@ components:
           type: boolean
         motherOperationId:
           type: string
+    DaughterOperation:
+      required:
+        - name
+      type: object
+        
     OperationWithDaughters:
       required:
         - accountId

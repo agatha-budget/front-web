@@ -1,5 +1,4 @@
 import type { Account, Operation, OperationWithDaughters } from '@/model/model'
-import { operationToOperationWithDaughter } from '@/model/model'
 import { operationApi } from '@/services/api/apis'
 import { useBudgetStore } from '@/stores/budgetStore'
 import { useOperationStore } from '@/stores/operationStore'
@@ -27,7 +26,7 @@ export default class OperationService {
     memo?: string,
     isPending?: boolean,
     motheroperationId?: string
-  ): ResultAsync<OperationWithDaughters, Error> {
+  ): ResultAsync<Operation, Error> {
     return ResultAsync.fromPromise(
       operationApi.addOperation(
         accountId,
@@ -40,18 +39,33 @@ export default class OperationService {
       ),
       defaultErrorHandler
     ).map((response) => {
-      const operation = operationToOperationWithDaughter(response.data)
-      useOperationStore().addOperationToAccount(accountId, operation)
+      let operation = response.data
+      useOperationStore().addOperationToAccount(operation)
       return operation
     })
   }
 
-  public static async deleteOperation(operationId: string) {
-    await operationApi.deleteOperation(operationId)
-    useBudgetStore().updateAccounts()
+  public static deleteOperation(accountId: string, operationId: string): ResultAsync<string, Error> {
+    return ResultAsync.fromPromise(
+      operationApi.deleteOperation(operationId),
+      defaultErrorHandler
+    ).map((response) => {
+        useOperationStore().delete(accountId, operationId)
+        return response.data
+    })
   }
 
-  public static async updateOperation(
+  public static deleteDaughterOperation(accountId: string, operationId: string, motherOperationId: string): ResultAsync<string, Error> {
+    return ResultAsync.fromPromise(
+      operationApi.deleteOperation(operationId),
+      defaultErrorHandler
+    ).map((response) => {
+        useOperationStore().delete(accountId, operationId, motherOperationId)
+        return response.data
+    })
+  }
+
+  public static updateOperation(
     operationId: string,
     accountId: string,
     day?: number,
@@ -61,20 +75,25 @@ export default class OperationService {
     memo?: string,
     isPending?: boolean,
     motheroperationId?: string
-  ): Promise<Operation> {
-    const response = await operationApi.updateOperation(
-      operationId,
-      accountId,
-      day,
-      categoryId,
-      removeCategory,
-      amount,
-      memo,
-      isPending,
-      motheroperationId
-    )
-    useBudgetStore().updateAccounts()
-    return response.data
+  ): ResultAsync<Operation, Error> {
+    return ResultAsync.fromPromise(
+      operationApi.updateOperation(
+        operationId,
+        accountId,
+        day,
+        categoryId,
+        removeCategory,
+        amount,
+        memo,
+        isPending,
+        motheroperationId
+      ),
+      defaultErrorHandler
+    ).map((response) => {
+      let operation = response.data
+      useOperationStore().update(operation)
+      return operation
+    })
   }
 
   public static async importOfxFile(

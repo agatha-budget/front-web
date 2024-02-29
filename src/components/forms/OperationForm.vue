@@ -272,7 +272,7 @@ export default defineComponent({
     },
     async deleteOperation () {
       if (this.operation) {
-        OperationService.deleteOperation(this.operation.id)
+        OperationService.deleteOperation(this.operation.accountId, this.operation.id)
       }
     },
     getCategoriesByMasterCategory (masterCategory: MasterCategory): Category[] {
@@ -338,6 +338,10 @@ export default defineComponent({
             }
           }
         )
+        if (this.operation) {
+          // don't close manual creation form after creation
+          this.$emit('closeUpdate')
+        }
     },
     updateOperation(operation: OperationWithDaughters) {
       // no category for mother operation if it has daughter (overriding if needed)
@@ -356,6 +360,7 @@ export default defineComponent({
         this.isPending
       )
       this.saveChangesToDaughters(operation.id)
+      this.closeForm()
     },
     saveChangesToDaughters (motherOperationId: string) {
       const preexistingDaughters = (this.operation) ? this.operation.daughters : []
@@ -394,7 +399,7 @@ export default defineComponent({
       preexistingDaughters.forEach(daughter => {
         if (this.operation) {
           if (this.daughterWasDeleted(daughter, this.daughtersData)) {
-            OperationService.deleteOperation(daughter.id)
+            OperationService.deleteDaughterOperation(daughter.accountId, daughter.id, daughter.motherOperationId)
           }
         }
       })

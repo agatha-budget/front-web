@@ -1,4 +1,5 @@
-import type { Account, OperationWithDaughters } from '@/model/model'
+import type { Account, Operation, OperationWithDaughters } from '@/model/model'
+import { operationToOperationWithDaughter } from '@/model/model'
 import OperationService from '@/services/OperationService'
 import Utils from '@/utils/Utils'
 import { defineStore } from 'pinia'
@@ -41,24 +42,75 @@ export const useOperationStore = defineStore('operation', {
       }
       return operations 
     },
-    addOperationToAccount(accountId: string, operation: OperationWithDaughters) {
-      this.operations[accountId] = Utils.insertInListSortedByDate(operation, this.operations[accountId])
-    },
-    updateOperationInAccount(accountId: string, operation: OperationWithDaughters) {
-      const index = this.getOperationIndex(operation, this.operations[accountId])
-      if (index > 0) {
-        this.operations[accountId].splice(index, 1, operation)
-      }    
-    },
-    deleteOperationInAccount(account: Account, operation: OperationWithDaughters) {
-      const index = this.getOperationIndex(operation, this.operations[account.id])
-      if (index > 0) {
-        this.operations[account.id].splice(index, 1)
+    addOperationToAccount(operation: Operation) {
+      if (operation.motherOperationId){
+        this.addDaughterOperation(operation)
+      } else {
+        let motherOperation = operationToOperationWithDaughter(operation)
+        this.operations[operation.accountId] = Utils.insertInListSortedByDate(motherOperation, this.operations[operation.accountId])
       }
     },
-    getOperationIndex(operation: OperationWithDaughters, operationList: OperationWithDaughters[]) : number{
+    addDaughterOperation(operation: Operation) {
+      for (const op of this.operations[operation.accountId]) {
+        if (op.id === operation.motherOperationId) {
+          op.daughters.push(operation)
+        }
+      } 
+    },
+    update(operation: Operation) {
+      if (operation.motherOperationId){
+        this.updateDaughterOperation(operation)
+      } else {
+        let motherOperation = operationToOperationWithDaughter(operation)
+        this.updateOperationWithDaugther(motherOperation)
+      }
+    },
+    updateOperationWithDaugther(operation: OperationWithDaughters) {
+      const index = this.getOperationIndex(operation.id, this.operations[operation.accountId])
+      if (index > 0) {
+        this.operations[operation.accountId].splice(index, 1, operation)
+      }    
+    },
+    updateDaughterOperation(operation: Operation) {
+      for (const op of this.operations[operation.accountId]) {
+        if (op.id === operation.motherOperationId) {
+          const index = this.getOperationIndex(operation.id, op.daughters)
+          if (index > 0) {
+            op.daughters.splice(index, 1, operation)
+          } else {
+            alert("Une erreur a eu lieu lors de la mise à jour de l'opération. Nous vous conseillons de recharger la page")
+          }
+        }
+      } 
+    },
+    delete(accountId: string, operationId: string, motherOperationId?: string) {
+      if (motherOperationId){
+        this.deleteDaughterOperation(accountId, operationId, motherOperationId)
+      } else {
+        this.deleteOperationInAccount(accountId, operationId)
+      }
+    },
+    deleteOperationInAccount(accountId: string, operationId: string) {
+      const index = this.getOperationIndex(operationId, this.operations[accountId])
+      if (index > 0) {
+        this.operations[accountId].splice(index, 1)
+      }
+    },
+    deleteDaughterOperation(accountId: string, operationId: string, motherOperationId: string) {
+      for (const op of this.operations[accountId]) {
+        if (op.id === motherOperationId) {
+          const index = this.getOperationIndex(operationId, op.daughters)
+          if (index > 0) {
+            op.daughters.splice(index, 1)
+          } else {
+            alert("Une erreur a eu lieu lors de la mise à jour de l'opération. Nous vous conseillons de recharger la page")
+          }
+        }
+      } 
+    },
+    getOperationIndex(operationId: string, operationList: Operation[] | OperationWithDaughters[]) : number{
       for (const [index, op] of operationList.entries()) {
-        if (op.id === operation.id) {
+        if (op.id === operationId) {
           return index
         }
       }
