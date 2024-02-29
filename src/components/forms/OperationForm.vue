@@ -347,7 +347,6 @@ export default defineComponent({
       // no category for mother operation if it has daughter (overriding if needed)
       let categoryId = (this.hasDaughters) ? undefined : this.categoryId
       // removeCategory enable the distinction between "category was not updated" and "category was updated to undefined"
-      console.log(categoryId)
       let removeCategory = (this.hasDaughters) ? true : (this.categoryId === undefined || this.categoryId === null)
       OperationService.updateOperation(
         operation.id,
@@ -358,18 +357,27 @@ export default defineComponent({
         this.signedCentsAmount,
         this.memo,
         this.isPending
+      ).then(
+        (res) => {
+          if (res.isOk()){
+            this.saveChangesToDaughters(operation.id)
+          }
+        }
       )
-      this.saveChangesToDaughters(operation.id)
       this.closeForm()
     },
     saveChangesToDaughters (motherOperationId: string) {
+
+      // change 
       const preexistingDaughters = (this.operation) ? this.operation.daughters : []
 
       this.daughtersData.forEach(daughter => {
         const amountCent = this.getSignedCentsAmount(daughter.incoming, daughter.amountString)
 
         // update an existing daughter
-        if (this.daughterAlreadyExist(daughter, preexistingDaughters)) {
+        console.log(daughter)
+        if (this.isPresent(daughter.id, preexistingDaughters)) {
+          console.log("update")
           const removeCategory = (daughter.categoryId === undefined || daughter.categoryId === null)
           OperationService.updateOperation(
             daughter.id,
@@ -381,8 +389,9 @@ export default defineComponent({
             daughter.memo,
             this.isPending
           )
-        // or create new daughter
+        // create new daughter
         } else {
+          console.log("create")
           OperationService.addOperation(
             this.accountId,
             Time.getDayFromDateString(this.date),
@@ -395,39 +404,25 @@ export default defineComponent({
         }
       })
 
-      // check if preexisting daughters were deleted
+      // delete preexisting daughter
       preexistingDaughters.forEach(daughter => {
+        console.log(daughter)
+        console.log("delete")
         if (this.operation) {
-          if (this.daughterWasDeleted(daughter, this.daughtersData)) {
+          // former daughter is not the the new list of daughter of the form
+          if (!this.isPresent(daughter.id, this.daughtersData)) {
             OperationService.deleteDaughterOperation(daughter.accountId, daughter.id, daughter.motherOperationId)
           }
         }
       })
     },
-    daughterAlreadyExist (daughter: DaughterFormData, list: Operation[]): boolean {
-      list.forEach(operation => {
-        if (operation.id === daughter.id) {
+    isPresent(daughterId: string, daugtherList: Operation[] | DaughterFormData[]): boolean {
+      for (let operation of daugtherList) {
+        if (operation.id === daughterId) {
           return true
         }
-      })
+      }
       return false
-    },
-    daughterWasDeleted (daughter: Operation, list: DaughterFormData[]): boolean {
-      list.forEach(operation => {
-        if (operation.id === daughter.id) {
-          return false
-        }
-      })
-      return true
-    },
-    rebootAddOperationForm () {
-      this.date = Time.getCurrentDateString()
-      this.isPending = false
-      this.memo = undefined
-      this.categoryId = undefined
-      this.incoming = false
-      this.amountString = Utils.centsToEurosDisplay(Math.abs(0))
-      this.daughtersData = []
     },
     getSignedCentsAmount (incoming: boolean, amountString: string): number {
       const amount = this.computeStringToCents(amountString)

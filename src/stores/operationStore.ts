@@ -61,24 +61,29 @@ export const useOperationStore = defineStore('operation', {
       if (operation.motherOperationId){
         this.updateDaughterOperation(operation)
       } else {
-        let motherOperation = operationToOperationWithDaughter(operation)
-        this.updateOperationWithDaugther(motherOperation)
+        this.updateOperationWithDaugther(operation)
       }
     },
-    updateOperationWithDaugther(operation: OperationWithDaughters) {
+    updateOperationWithDaugther(operation: Operation) {
       const index = this.getOperationIndex(operation.id, this.operations[operation.accountId])
+      let daugthers = this.operations[operation.accountId][index].daughters
+      let operationWithDaughters = operationToOperationWithDaughter(operation)
+      operationWithDaughters.daughters = daugthers
       if (index > 0) {
-        this.operations[operation.accountId].splice(index, 1, operation)
+        this.operations[operation.accountId].splice(index, 1, operationWithDaughters)
       }    
     },
     updateDaughterOperation(operation: Operation) {
       for (const op of this.operations[operation.accountId]) {
         if (op.id === operation.motherOperationId) {
           const index = this.getOperationIndex(operation.id, op.daughters)
-          if (index > 0) {
+          if (index >= 0) {
             op.daughters.splice(index, 1, operation)
           } else {
-            alert("Une erreur a eu lieu lors de la mise à jour de l'opération. Nous vous conseillons de recharger la page")
+            console.log(operation)
+            console.log(op.daughters)
+            console.log(index)
+            alert(`Une erreur a eu lieu lors de la mise à jour de l'opération ${operation.memo}. Nous vous conseillons de recharger la page`)
           }
         }
       } 
@@ -100,7 +105,7 @@ export const useOperationStore = defineStore('operation', {
       for (const op of this.operations[accountId]) {
         if (op.id === motherOperationId) {
           const index = this.getOperationIndex(operationId, op.daughters)
-          if (index > 0) {
+          if (index >= 0) {
             op.daughters.splice(index, 1)
           } else {
             alert("Une erreur a eu lieu lors de la mise à jour de l'opération. Nous vous conseillons de recharger la page")
