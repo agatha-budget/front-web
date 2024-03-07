@@ -16,7 +16,7 @@ export const usePersonStore = defineStore('person', {
     async init() {
       if (this.person === null) {
         this.person = await PersonService.getPerson()
-      }
+      }      
       useBudgetStore().init()
     }
   }

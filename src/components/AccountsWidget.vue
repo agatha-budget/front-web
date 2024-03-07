@@ -81,6 +81,9 @@ export default defineComponent({
     },
     centsToEurosDisplay (amount: number): string {
       return Utils.centsToEurosDisplay(amount)
+    },
+    getAccounts(){
+      useBudgetStore().updateAccounts()
     }
   }
 })
