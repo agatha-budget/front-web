@@ -7,6 +7,9 @@ tasks:
   hello:
     cmds:
       - echo "Bonjour à vous mes très chers amis !"
+  start_env:
+    cmds:
+      - nix-shell --pure
   run:
     cmds:
       - sh ./scripts/set_dev_properties.sh; vite
