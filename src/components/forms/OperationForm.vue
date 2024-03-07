@@ -257,7 +257,10 @@ export default defineComponent({
       } else {
         return -1 * this.computeStringToCents(this.amountString) - this.signedCentsDaughterSumAmount
       }
-    }
+    },
+    preexistingDaughters(): Operation[] {
+      return (this.operation) ? this.operation.daughters : []
+    } 
   },
   emits: ['closeForm', 'closeUpdate'],
   methods: {
@@ -371,42 +374,43 @@ export default defineComponent({
       this.closeForm()
     },
     saveChangesToDaughters (motherOperationId: string) {
-
-      // change 
-      const preexistingDaughters = (this.operation) ? this.operation.daughters : []
-
       this.daughtersData.forEach(daughter => {
-        const amountCent = this.getSignedCentsAmount(daughter.incoming, daughter.amountString)
-
-        // update an existing daughter
-        if (this.isPresent(daughter.id, preexistingDaughters)) {
-          const removeCategory = (daughter.categoryId === undefined || daughter.categoryId === null)
-          OperationService.updateOperation(
-            daughter.id,
-            this.accountId,
-            Time.getDayFromDateString(this.date),
-            daughter.categoryId,
-            removeCategory,
-            amountCent,
-            daughter.memo,
-            this.isPending
-          )
-        // create new daughter
+        if (this.isPresent(daughter.id, this.preexistingDaughters)) {
+          this.updatePreexistingDaughter(daughter)
         } else {
-          OperationService.addOperation(
-            this.accountId,
-            Time.getDayFromDateString(this.date),
-            daughter.categoryId,
-            amountCent,
-            daughter.memo,
-            this.isPending,
-            motherOperationId
-          )
+          this.addNewDaughter(daughter, motherOperationId)
         }
       })
-
-      // delete preexisting daughter
-      preexistingDaughters.forEach(daughter => {
+      this.deleteRemovedPreexistingDaughter()
+    },
+    updatePreexistingDaughter(daughter: DaughterFormData) {
+      const removeCategory = (daughter.categoryId === undefined || daughter.categoryId === null)
+      const amountCent = this.getSignedCentsAmount(daughter.incoming, daughter.amountString)
+      OperationService.updateOperation(
+        daughter.id,
+        this.accountId,
+        Time.getDayFromDateString(this.date),
+        daughter.categoryId,
+        removeCategory,
+        amountCent,
+        daughter.memo,
+        this.isPending
+      )
+    },
+    addNewDaughter(daughter:DaughterFormData, motherOperationId : string) {
+      const amountCent = this.getSignedCentsAmount(daughter.incoming, daughter.amountString)
+      OperationService.addOperation(
+        this.accountId,
+        Time.getDayFromDateString(this.date),
+        daughter.categoryId,
+        amountCent,
+        daughter.memo,
+        this.isPending,
+        motherOperationId
+      )
+    },
+    deleteRemovedPreexistingDaughter() {
+      this.preexistingDaughters.forEach(daughter => {
         if (this.operation) {
           // former daughter is not the the new list of daughter of the form
           if (!this.isPresent(daughter.id, this.daughtersData)) {

@@ -15,7 +15,7 @@ tasks:
       - jest
   build:
     cmds:
-      - run-p type-check \"build-only {@}\" --
+      - vue-tsc --noEmit && vite build
   build_for_beta:
     cmds:
       - sh ./scripts/set_beta_properties.sh
