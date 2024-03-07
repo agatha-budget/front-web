@@ -27,3 +27,7 @@ tasks:
   apigen:
     cmds:
       - openapi-generator-cli generate -g typescript-axios -i src/services/api/openapi.yaml -o src/services/api/openApi
+  pwa_assets:
+    desc: generate icons for PWA
+    cmds: 
+      - pwa-assets-generator --preset minimal-2023 public/logo_round.png
