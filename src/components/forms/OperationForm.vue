@@ -344,10 +344,10 @@ export default defineComponent({
               let motherOperation = res.value
               this.saveChangesToDaughters(motherOperation.id)
               useBudgetStore().updateAccounts(false)
+              this.rebootAddOperationForm()
             }
           }
         )
-      this.rebootAddOperationForm()
     },
     updateOperation(operation: OperationWithDaughters) {
       // no category for mother operation if it has daughter (overriding if needed)
