@@ -31,15 +31,6 @@
             <button class="actionButton" v-on:click="goToBillingPortal('MONTHLY_ESSENTIAL')">{{ $t('PRICE_MONTHLY_ESSENTIAL') }}</button>
             <button class="actionButton" v-on:click="goToBillingPortal('ANNUAL_ESSENTIAL')">{{ $t('PRICE_ANNUAL_ESSENTIAL') }}</button>
           </div>
-          <div class="integral">
-            <div class="banner">
-              <span class="icon icon-plane" />
-              <div class="title">{{ $t('INTEGRAL') }}</div>
-            </div>
-            <p>{{ $t('TEXT_INTEGRAL') }}</p>
-            <button class="actionButton" v-on:click="goToBillingPortal('MONTHLY_INTEGRAL')">{{ $t('PRICE_MONTHLY_INTEGRAL') }}</button>
-            <button class="actionButton" v-on:click="goToBillingPortal('ANNUAL_INTEGRAL')">{{ $t('PRICE_ANNUAL_INTEGRAL') }}</button>
-          </div>
           <div class="solidarity">
             <div class="banner">
               <span class="icon icon-support" />
