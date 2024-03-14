@@ -39,6 +39,11 @@ export const useOperationStore = defineStore('operation', {
         if (op.categoryId === categoryId) {
           operations.push(op)
         }
+        for (const dau of op.daughters){
+          if (dau.categoryId === categoryId) {
+            operations.push(op)
+          }
+        }
       }
       return operations 
     },

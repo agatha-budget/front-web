@@ -84,10 +84,10 @@
           </div>
         </div>
         <div class="placeholder bottom">
-          <NavMenu :page="'accounts'" />
+          <NavMenu/>
         </div>
         <div class="footer fixed">
-          <NavMenu :page="'accounts'" />
+          <NavMenu/>
         </div>
       </div>
     </div>
