@@ -10,7 +10,7 @@ tasks:
   start_env:
     cmds:
       - nix-shell --pure
-  run:
+  serve:
     cmds:
       - sh ./scripts/set_dev_properties.sh; vite
   test:

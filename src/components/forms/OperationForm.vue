@@ -200,7 +200,7 @@ export default defineComponent({
   },
   computed: {
     hasDaughters(): boolean {
-      return this.daughtersData.length === 1
+      return this.daughtersData.length > 0
     },
     amountStringIsUnset (): boolean {
       return this.amountString === Math.abs(0).toString()
