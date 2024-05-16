@@ -9,10 +9,11 @@
           <AccountPageHeader :accountId="accountId" :totalAccount="totalAccount" :existingPendingOperation="pendingOperation()" :realAmountOnAccount="realAmount"/>
         </div>
         <div class="content container operationTable table-hover">
-          <div class="tripleTab switchOperation">
+
+          <BankSyncCmpt :accountId="accountId"/>
+          <div class="dualTab switchOperation">
             <button v-if="manualBloc" v-on:click="switchAddOperation('manual')" class="tabLeft active">{{ $t("ADD_MANUALLY") }}</button>
             <button v-else v-on:click="switchAddOperation('manual')" class="tabLeft">{{ $t("ADD_MANUALLY") }}</button>
-            <button v-on:click="goToBanksPage" class="tabCenter">{{ $t("SYNC_BANK") }}</button>
             <button v-if="importBloc" v-on:click="switchAddOperation('import')" class="tabRight active">{{ $t("BANK_IMPORT") }}</button>
             <button v-else v-on:click="switchAddOperation('import')" class="tabRight">{{ $t("BANK_IMPORT") }}</button>
           </div>
@@ -103,9 +104,10 @@ import ImportOfx from '@/components/ImportOfx.vue';
 import NavMenu from '@/components/NavigationMenu.vue';
 import OperationForm from '@/components/forms/OperationForm.vue';
 import AccountPageHeader from '@/components/headers/AccountPageHeader.vue';
+import BankSyncCmpt from '@/components/BankSyncCmpt.vue';
+
 import Loader from '@/components/utils/Loader.vue';
 import type { Account, Category, Operation, OperationWithDaughters } from '@/model/model';
-import router, { RouterPages } from '@/router';
 import { useBudgetStore } from '@/stores/budgetStore';
 import { useOperationStore } from '@/stores/operationStore';
 import { usePersonStore } from '@/stores/personStore';
@@ -129,6 +131,7 @@ export default defineComponent({
     OperationForm,
     NavMenu,
     AccountPageHeader,
+    BankSyncCmpt,
     ImportOfx,
     FilterCmpt,
     Loader
@@ -252,9 +255,6 @@ export default defineComponent({
       if (!this.filterBloc) {
         this.filteringCategoryId = null
       }
-    },
-    goToBanksPage () {
-      router.push(RouterPages.banks)
     },
     centsToEurosDisplay (amount: number): string {
       return Utils.centsToEurosDisplay(amount)
