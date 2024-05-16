@@ -11,7 +11,7 @@ externalDocs:
   description: Find out more about Agatha-Budget
   url: https://agatha-budget.fr
 servers:
-  - url: http://localhost:7000/
+  - url: http://localhost:8000/
     description: local
   - url: https://virtserver.swaggerhub.com/ermoca/Agatha/3.0.0
     description: SwaggerHub API Auto Mocking
@@ -1643,6 +1643,8 @@ components:
           type: number
         bankAccountId:
           type: string
+        syncedUntil:
+          type: number
     MasterCategory:
       required:
         - budgetId
@@ -1818,6 +1820,7 @@ components:
       required:
         - id
         - name
+        - bank
         - bankId
         - timestamp
       type: object
@@ -1828,7 +1831,13 @@ components:
           type: string
         bankId:
           type: string
+          example: "CREDIT_COOPERATIF_CCOPFRPPXXX"
+        bankingId:
+          type: string
+          description: Id used by the bank for this account VS id which is its id in our own db
         timestamp:
+          type: number
+        balance:
           type: number
       xml:
         name: bank

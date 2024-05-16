@@ -1,6 +1,6 @@
 enum Properties {
     server = 'http://localhost:8000',
-    commitHash = '2cde27af92c1283aa051d52d04f859af1a2d972a'
+    commitHash = '0f3a21cd49ddb4ab9f5d8b14b2fd7d059ffe08c2'
 }
 
 export default Properties

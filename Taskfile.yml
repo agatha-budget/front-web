@@ -29,7 +29,15 @@ tasks:
       - task: build
   apigen:
     cmds:
-      - openapi-generator-cli generate -g typescript-axios -i src/services/api/openapi.yaml -o src/services/api/openApi
+      - java -jar openapi-generator-cli-7.5.0.jar generate -g typescript-axios -i src/services/api/openapi.yaml -o src/services/api/openApi
+      - rm -r src/services/api/openApi/.* src/services/api/openApi/git_push.sh
+      - sed -i -e "s/globalAxios from 'axios';/{ globalAxios } from \"@\/services\/api\/httpservice\";/g" ./src/services/api/openApi/api.ts
+      - sed -i -e "s/\"http:\/\/localhost:8000\"/Properties.server/g" ./src/services/api/openApi/base.ts
+      - sed -i -e "s/import globalAxios from 'axios';/const globalAxios = HttpService.getAxiosClient();/g" ./src/services/api/openApi/base.ts
+      - sed -i '20i import HttpService from \"@\/services\/api\/httpservice\";' ./src/services/api/openApi/base.ts
+      - sed -i '21i import Properties from \"@\/..\/properties\";' ./src/services/api/openApi/base.ts
+
+
   pwa_assets:
     desc: generate icons for PWA
     cmds: 
