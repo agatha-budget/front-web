@@ -1,27 +1,40 @@
 .bankAccount {
     display: grid;
-    max-height: fit-content;
-    grid-area: "logo content action";
-    grid-template-columns: 2fr 4fr 1fr;
-    max-height: 190px;
+    padding: 0 0 35px 0;
+    grid-template-areas:
+        "edit edit" 
+        "logo title"
+        "associated associated";
+    grid-template-columns: 1fr 2fr;
+    column-gap: 20px;
+    max-width: 500px;
     .logo {
         align-self: center;
-        justify-self: center;
-        max-height: 150px;
+        justify-self: end;
+        max-height: 100px;
+        padding-left: 40px;
     }
-    .content {
-        .name, .balance, .until  {
-            display: block;
-        }
-        .name {
-            margin-top: 0;
-        }
-        justify-self: center;
+    .bankAccountTitle {
+        margin-right: 40px;
+        grid-area: title;
         align-self: center;
-        max-height: 150px;
+        justify-self: center;
+        .name, .balance {
+            display: block;
+            margin: 0;
+        }
     }
     .action {
-        align-self: start;
+        grid-area: edit;
+        padding: 5px;
+        justify-self: end;
+    }
+    .associated {
+        padding: 20px 20px 0 20px;
+        grid-area: associated;
+    }
+    .until {
+        grid-area: until;
     }
     &:hover{
         .action {
