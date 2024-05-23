@@ -8,13 +8,20 @@
           {{ $t('BANKS') }}
         </div>
 
+        <div v-if="bankLoaded">
+          <BankForm v-if="displayBankForm" :availableBanks="availableBanks"/>
+          
+          <template v-if="!displayBankForm">
+            <button v-on:click="updateOpenBankForm" class="actionButton">{{$t('ADD_BANK_ACCOUNT')}}</button>
+            <template v-for="bankAccount of bankAccounts" :key="bankAccount">
+              <BankAccountCmpt :bankAccount="bankAccount" :logo="getLogo(bankAccount.bankId)"/>
+            </template>
+          </template>
+        </div>
+        <div v-else>
+          <Loader class="loader"/>
+        </div>
 
-        <template v-for="bankAccount of bankAccounts" :key="bankAccount">
-          <BankAccountCmpt :bankAccount="bankAccount" :logo="getLogo(bankAccount.bankId)"/>
-        </template>
-
-        <BankForm :availableBanks="availableBanks"/>
-        
         <div class="placeholder bottom">
           <NavMenu :page="'profile'" />
         </div>
@@ -37,7 +44,7 @@ import { useBudgetStore } from '@/stores/budgetStore'
 import { usePersonStore } from '@/stores/personStore'
 import Time from '@/utils/Time'
 import { defineComponent } from 'vue'
-
+import Loader from '@/components/utils/Loader.vue';
 
 
 interface BankAccountByTimestampList {
@@ -62,11 +69,13 @@ interface BanksData {
   bankAccounts: BankAccount[];
   bankAssociation: BankAssociationList;
   selectedBankId: string|null;
+  openBankForm: Boolean;
+  bankLoaded: Boolean;
 }
 
 export default defineComponent({
   name: 'BanksView',
-  components: { NavMenu, BankForm, BankAccountCmpt },
+  components: { NavMenu, BankForm, BankAccountCmpt, Loader },
   created: async function () {
     useBudgetStore().init()
     this.getAuthorizedAccounts()
@@ -85,7 +94,9 @@ export default defineComponent({
       availableBanks: [],
       bankAccounts: [],
       bankAssociation: {},
-      selectedBankId: null
+      selectedBankId: null,
+      openBankForm: false,
+      bankLoaded: false,
     }
   },
   watch: {
@@ -108,6 +119,9 @@ export default defineComponent({
     },
     css (): string {
       return usePersonStore().css
+    },
+    displayBankForm() {
+      return this.openBankForm || this.bankAccounts.length < 1 
     }
   },
   methods: {
@@ -116,11 +130,14 @@ export default defineComponent({
         BankingService.getAuthorizedAccounts(this.budget).then(
           (bankAccountList) => {
             this.bankAccounts = bankAccountList
+            this.bankLoaded = true
           }
         )
       }
     },
-
+    updateOpenBankForm() {
+      this.openBankForm = !this.openBankForm
+    },
     updateIfAgreement () {
       if (this.$props.query != null) {
         const agreementId = this.$props.query.split('?')[0]

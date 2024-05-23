@@ -165,5 +165,6 @@
     "UNSYNCED_GO_TO_BANKS" : "Renouveler la mise à jour automatique",
     "ASSOCIATED_TO": "associé à",
     "UNASSOCIATED": "non associé à un compte",
-    "AUTHORISED_UNTIL" : "autorisé jusqu'au"
+    "AUTHORISED_UNTIL" : "autorisé jusqu'au",
+    "ADD_BANK_ACCOUNT" : "ajouter un compte bancaire"
 }

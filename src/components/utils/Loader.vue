@@ -2,7 +2,6 @@
   <div class="image-spinner">
     <img src="@/assets/logo_round.png"/>
     <div class="spin spinner"></div>
-    <div>{{$t('LOADING')}}</div>
   </div>
 </template>
 
