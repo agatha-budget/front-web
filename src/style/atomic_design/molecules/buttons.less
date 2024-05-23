@@ -48,26 +48,34 @@ a.navigationButton {
   }
 
   // content layout
-  display: grid;
-  grid-template-areas: "icon content";
-  grid-template-columns: 4fr 6fr;
-  .illustration {
-    grid-area: icon;
-    text-align: right;
-    align-self: center;
-    margin-right: 20px;
+  &.illustrated {
+    display: grid;
+    grid-template-areas: "icon content";
+    grid-template-columns: 4fr 6fr;
+    .illustration {
+      grid-area: icon;
+      text-align: right;
+      align-self: center;
+      margin-right: 20px;
+    }
+    .illustrationLabel {
+      grid-area: content;
+      text-align: left;
+    }
   }
-  .illustrationLabel {
-    grid-area: content;
-    text-align: left;
-  }
-
 
 
   &.accounts {
-    margin: 5px auto;
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-areas: "name amount icon";
+    grid-template-columns: 5fr 3fr 1fr ;
+  }
+  .name {
+    text-align: left;
+    padding-left: 40px;
+  }
+  .amount {
+    padding: 0 15px;
     text-align: left;
   }
 }

@@ -10,19 +10,19 @@
         <div class="content container">
           <img id="logoface" alt="Vue logoface" src="../assets/logo_round.png"/>
           <div class="buttonList">
-            <button class="navigationButton" v-on:click="goToSubscriptionPage">
+            <button class="navigationButton illustrated" v-on:click="goToSubscriptionPage">
               <span class="illustration fas fa-credit-card"/>
               <span class="illustrationLabel">{{ $t("SUBSCRIPTION") }}</span>
             </button>
-            <button class="navigationButton" v-on:click="goToBanksPage">
+            <button class="navigationButton illustrated" v-on:click="goToBanksPage">
               <span class="illustration fas fa-university"/>
               <span class="illustrationLabel">{{ $t("BANKS") }}</span>
             </button>
-            <button class="navigationButton disabled">
+            <button class="navigationButton illustrated disabled">
               <span class="illustration fas fa-palette"/>
               <span class="illustrationLabel">{{ $t("APPEARANCE") }}</span>
             </button>
-            <button class="navigationButton" v-on:click="logout">
+            <button class="navigationButton illustrated" v-on:click="logout">
               <span class="illustration fas fa-sign-out-alt"/>
               <span class="illustrationLabel">{{ $t("LOGOUT") }}</span>
             </button>
