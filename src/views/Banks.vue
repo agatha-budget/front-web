@@ -8,72 +8,13 @@
           {{ $t('BANKS') }}
         </div>
 
-        <div class="banner">
-          <div class="title">{{ $t('ACCOUNT_ASSOCIATION') }}</div>
-        </div>
 
-        <template v-for="account of accounts" :key="account">
-          <div class="associationForm">
-            <div class="subtitle col-md-4">{{ account.name }}</div>
-            <div class="col-md-4 col-8 offset-2 offset-md-0 bankSelector">
-              <select class="form-select" v-model="bankAssociation[account.id].bankAccountId">
-                <option value="none" selected>{{ $t('NO_ASSOCIATED_BANK_ACCOUNT') }}</option>
-                <template v-for="bankAccount of bankAccounts" :key="bankAccount">
-                  <option :value=bankAccount.id>
-                  {{ bankAccount.name }}
-                  </option>
-                </template>
-              </select>
-            </div>
-            <div class="col-md-4 col-8 offset-2 offset-md-0 historyCheckBox">
-              <template  v-if="displayImportHistoryOption(account)">
-                <label class="form-check-label" for="importHistory">{{ $t('IMPORT_HISTORY') }}</label>
-                <input id="importHistory" class="form-check-input" type="checkbox" v-model="bankAssociation[account.id].importHistory" >
-              </template>
-            </div>
-          </div>
+        <template v-for="bankAccount of bankAccounts" :key="bankAccount">
+          <BankAccountCmpt :bankAccount="bankAccount" :logo="getLogo(bankAccount.bankId)"/>
         </template>
 
-        <button class="actionButton" v-on:click="saveAssociation()">{{ $t('UPDATE') }}</button>
-
-        <div class="banner">
-          <div class="title">{{ $t('SYNCHRONISED_BANKS') }}</div>
-        </div>
-
-        <template v-for="(timestampList, bankId) of authorizedBanks" :key="bankId">
-            <div class="container bordered row col-8 offset-2">
-              <div class="col-md-6">
-                <img class="illustration banklogo" alt="banklogo" :src="getLogo(bankId.toString())"/>
-              </div>
-              <div class="col-md-6">
-                <template v-for="(bankAccountArray, timestamp) of timestampList" :key="timestamp">
-                  <div class="subtext">
-                  {{ $t('EXPIRE_ON') }} {{ getExpirationDateFromTimestamp(timestamp) }}
-                  </div>
-                  <div v-for="bankAccount of bankAccountArray">
-                    {{ bankAccount.name }}
-                  </div>
-                </template>
-              </div>
-            </div>
-        </template>
-
-        <div class="container bordered col-8 offset-2">
-          <div class="subtitle">{{ $t('ADD_BANK_AUTHORIZATION') }}</div>
-          <p>{{ $t('WHY_ADD_AUTHORIZATION_TEXT_P1') }}</p>
-          <p class="bold">{{ $t('WHY_ADD_AUTHORIZATION_TEXT_P2') }}</p>
-          <p>{{ $t('WHY_ADD_AUTHORIZATION_TEXT_P3') }}</p>
-
-          <Multiselect
-            v-model="selectedBankId"
-            :groups="false"
-            :searchable="true"
-            :options="bankOptions"
-            :noResultsText="$t('NO_RESULT_FOUND')"
-            :placeholder="$t('SELECT_BANK')"
-          />
-          <button class="actionButton" v-on:click="getBankAuthorization">{{ $t('AUTHORIZE') }}</button>
-        </div>
+        <BankForm :availableBanks="availableBanks"/>
+        
         <div class="placeholder bottom">
           <NavMenu :page="'profile'" />
         </div>
@@ -89,11 +30,12 @@ import NavMenu from '@/components/NavigationMenu.vue'
 import type { Account, Bank, BankAccount, Budget, SelectOption } from '@/model/model'
 import router, { RouterPages } from '@/router'
 import AccountService from '@/services/AccountService'
+import BankForm from '@/components/forms/BankForm.vue'
+import BankAccountCmpt from '@/components/BankAccountCmpt.vue'
 import BankingService from '@/services/BankingService'
 import { useBudgetStore } from '@/stores/budgetStore'
 import { usePersonStore } from '@/stores/personStore'
 import Time from '@/utils/Time'
-import Multiselect from '@vueform/multiselect'
 import { defineComponent } from 'vue'
 
 
@@ -124,13 +66,13 @@ interface BanksData {
 
 export default defineComponent({
   name: 'BanksView',
-  components: { NavMenu, Multiselect },
+  components: { NavMenu, BankForm, BankAccountCmpt },
   created: async function () {
     useBudgetStore().init()
-    this.getAvailableBanks()
     this.getAuthorizedAccounts()
     this.updateIfAgreement()
     this.updateAssociationData()
+    this.getAvailableBanks()
   },
   props: {
     query: {
@@ -164,26 +106,11 @@ export default defineComponent({
     authorizedBanks (): BankAuthorizationList | null {
       return this.groupAccountByBankAndTimestamp(this.bankAccounts)
     },
-    bankOptions (): SelectOption[] {
-      const optionsList = []
-      for (const bank of this.availableBanks) {
-        const option = { value: bank.id, label: bank.name }
-        optionsList.push(option)
-      }
-      return optionsList
-    },
     css (): string {
       return usePersonStore().css
     }
   },
   methods: {
-    getAvailableBanks () {
-      BankingService.getAvailableBanks().then(
-        (bankList) => {
-          this.availableBanks = bankList
-        }
-      )
-    },
     getAuthorizedAccounts () {
       if (this.budget) {
         BankingService.getAuthorizedAccounts(this.budget).then(
@@ -193,11 +120,7 @@ export default defineComponent({
         )
       }
     },
-    getBankAuthorization () {
-      if (this.budget && this.selectedBankId) {
-        BankingService.goToBankAgreement(this.budget, this.selectedBankId)
-      }
-    },
+
     updateIfAgreement () {
       if (this.$props.query != null) {
         const agreementId = this.$props.query.split('?')[0]
@@ -249,6 +172,13 @@ export default defineComponent({
         }
       })
       return banks
+    },
+    getAvailableBanks () {
+      BankingService.getAvailableBanks().then(
+        (bankList) => {
+          this.availableBanks = bankList
+        }
+      )
     },
     getLogo (bankId: string): string {
       for (const bank of this.availableBanks) {

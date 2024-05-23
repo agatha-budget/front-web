@@ -1,0 +1,32 @@
+.bankAccount {
+    display: grid;
+    max-height: fit-content;
+    grid-area: "logo content action";
+    grid-template-columns: 2fr 4fr 1fr;
+    max-height: 190px;
+    .logo {
+        align-self: center;
+        justify-self: center;
+        max-height: 150px;
+    }
+    .content {
+        .name, .balance, .until  {
+            display: block;
+        }
+        .name {
+            margin-top: 0;
+        }
+        justify-self: center;
+        align-self: center;
+        max-height: 150px;
+    }
+    .action {
+        align-self: start;
+    }
+    &:hover{
+        .action {
+            visibility: visible;
+            color: @action;
+        }
+    }
+}
