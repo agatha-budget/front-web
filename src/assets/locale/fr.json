@@ -142,7 +142,7 @@
     "CATEGORIES": "Les catégories : ",
     "IS_IN_DEFICIT": " est déficitaire. Elle n'est donc pas affichée.",
     "ARE_IN_DEFICIT": " sont déficiataires. Elles ne sont donc pas affichées.",
-    "IMPORT_HISTORY": "importer l'historique",
+    "IMPORT_HISTORY": "importer les dépenses des 3 derniers mois",
     "SELECT_BANK": "Entrez le nom de votre banque",
     "ADD_BANK_AUTHORIZATION": "ajouter une synchronisation bancaire",
     "WHY_ADD_AUTHORIZATION_TEXT_P1": "Afin de faciliter le suivi de vos comptes, vous avez la possibilité de synchroniser Agatha et vos comptes bancaires. Vos dépenses seront ainsi mises à jour automatiquement.",
@@ -168,5 +168,7 @@
     "UNASSOCIATED": "non associé à un compte",
     "AUTHORISED_UNTIL" : "autorisé jusqu'au",
     "ADD_BANK_ACCOUNT" : "ajouter un compte bancaire",
-    "CONTACTING_BANKS" : "Vérification auprès des banques"
+    "CONTACTING_BANKS" : "Vérification auprès des banques",
+    "ASSOCIATE": "Associer",
+    "CLOSE" : "Fermer"
 }

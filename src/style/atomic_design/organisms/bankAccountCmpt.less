@@ -29,7 +29,7 @@
         padding: 5px;
         justify-self: end;
     }
-    .associated {
+    .details {
         width: 80%;
         margin-top: 30px;
         justify-self: center;
@@ -42,6 +42,27 @@
         .action {
             visibility: visible;
             color: @action;
+        }
+    }
+
+    // FORM
+    &.editing {
+        background: @header;
+        .bankAccountTitle *, .label{
+            color: @white;
+        }
+        .input {
+            margin: 0;
+        }
+        .history {
+            margin-top: 20px;
+            .label {
+                text-align: left;
+            }
+        }
+        .action {
+            visibility: visible;
+            color: @white;
         }
     }
 }
