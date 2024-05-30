@@ -10,20 +10,23 @@
         </span>
       </div>
       <button class="illustration btn fas fa-pen action" :title="$t('EDIT')" />
-      <span class="associated" v-if="associatedAccount">
-        {{ $t('ASSOCIATED_TO') }} 
-        <span class="bold">{{associatedAccount.name}}</span>
-      </span>
+      <button v-if="associatedAccount" class="navigationButton associated" v-on:click="goToAccountPage(associatedAccount)">
+        {{ $t('ASSOCIATED_TO') }} <span class="bold">{{associatedAccount.name}}</span>
+      </button>
   </div>
 </template>
 
 <script lang="ts">
+import router, { RouterPages } from '@/router'
 import type { Account, BankAccount } from '@/model/model'
 import Time from '@/utils/Time'
 import { useBudgetStore } from '@/stores/budgetStore'
 import { defineComponent } from 'vue'
 import Utils from '@/utils/Utils'
 
+interface BankAccountCmptData {
+  edit: boolean;
+}
 
 export default defineComponent({
   name: 'BankAccountCmpt',
@@ -35,6 +38,11 @@ export default defineComponent({
     logo: {
       type: String,
       required: true
+    }
+  },
+  data (): BankAccountCmptData {
+    return {
+      edit: false
     }
   },
   computed: {
@@ -56,6 +64,9 @@ export default defineComponent({
     }
   },
   methods: {
+    goToAccountPage (account: Account) {
+      router.push({ path: RouterPages.account, query: { accountId: account.id } })
+    },
   }
 })
 </script>
