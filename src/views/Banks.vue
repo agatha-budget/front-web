@@ -7,21 +7,22 @@
         <div class="placeholder top">
           {{ $t('BANKS') }}
         </div>
-
-        <div v-if="bankLoaded">
-          <BankForm v-if="displayBankForm" :availableBanks="availableBanks" @close-form="updateOpenBankForm"/>
-          
-          <template v-if="!displayBankForm">
-            <button v-on:click="updateOpenBankForm" class="actionButton">{{$t('ADD_BANK_ACCOUNT')}}</button>
-            <template v-for="bankAccount of bankAccounts" :key="bankAccount">
-              <BankAccountCmpt :bankAccount="bankAccount" :logo="getLogo(bankAccount.bankId)"/>
+        <div class="content container">
+          <div v-if="bankLoaded">
+            <BankForm v-if="displayBankForm" :availableBanks="availableBanks" @close-form="updateOpenBankForm"/>
+            
+            <template v-if="!displayBankForm">
+              <button v-on:click="updateOpenBankForm" class="actionButton">{{$t('ADD_BANK_ACCOUNT')}}</button>
+              <template v-for="bankAccount of bankAccounts" :key="bankAccount">
+                <BankAccountCmpt :bankAccount="bankAccount" :logo="getLogo(bankAccount.bankId)"/>
+              </template>
             </template>
-          </template>
+          </div>
+          <div v-else>
+            <Loader class="loader"/>
+            <p>{{ $t('CONTACTING_BANKS') }}</p>
+          </div>
         </div>
-        <div v-else>
-          <Loader class="loader"/>
-        </div>
-
         <div class="placeholder bottom">
           <NavMenu :page="'profile'" />
         </div>
@@ -34,7 +35,7 @@
 
 <script lang="ts">
 import NavMenu from '@/components/NavigationMenu.vue'
-import type { Account, Bank, BankAccount, Budget, SelectOption } from '@/model/model'
+import type { Account, Bank, BankAccount, Budget} from '@/model/model'
 import router, { RouterPages } from '@/router'
 import AccountService from '@/services/AccountService'
 import BankForm from '@/components/forms/BankForm.vue'
