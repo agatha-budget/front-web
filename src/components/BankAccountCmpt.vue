@@ -9,14 +9,17 @@
           <span class="bold">{{syncedUntil}}</span>
         </span>
       </div>
-      <button v-if="!edit" v-on:click="updateEdit" class="illustration btn fas fa-pen action hideableActionGuide" :title="$t('EDIT')" />
-      <button v-else v-on:click="updateEdit" class="illustration btn fas fa-times-circle action" :title="$t('CLOSE')" />
+      <button v-if="!edit" v-on:click="updateEdit(false)" class="illustration btn fas fa-pen action hideableActionGuide" :title="$t('EDIT')" />
+      <button v-else v-on:click="updateEdit(false)" class="illustration btn fas fa-times-circle action" :title="$t('CLOSE')" />
 
       <div class="details">
         <div v-if="!edit">
+          <span v-if="importDone">{{ $t('IMPORT_DONE') }}</span>
           <button v-if="associatedAccount" class="navigationButton associated" v-on:click="goToAccountPage(associatedAccount)">
             {{ $t('ASSOCIATED_TO') }} <span class="bold">{{associatedAccount.name}}</span>
           </button>
+          <button v-else class="actionButton" v-on:click="updateEdit(false)">{{ $t('ASSOCIATE_AGATHA') }}</button>
+
         </div>
         <div v-else>
           <BankAccountForm :bankAccount="bankAccount" :initiallyAssociatedAccount="initiallyAssociatedAccount" @update="updateEdit"/>
@@ -36,6 +39,7 @@ import Utils from '@/utils/Utils'
 
 interface BankAccountCmptData {
   edit: boolean;
+  importDone: boolean;
 }
 
 export default defineComponent({
@@ -53,7 +57,8 @@ export default defineComponent({
   },
   data (): BankAccountCmptData {
     return {
-      edit: false
+      edit: false,
+      importDone: false
     }
   },
   computed: {
@@ -84,7 +89,12 @@ export default defineComponent({
     goToAccountPage (account: Account) {
       router.push({ path: RouterPages.account, query: { accountId: account.id } })
     },
-    updateEdit() {
+    updateEdit(withImport=false) {
+      if (withImport) {
+        this.importDone = true
+      } else {
+        this.importDone = false
+      }
       this.edit = !this.edit
     },
   }

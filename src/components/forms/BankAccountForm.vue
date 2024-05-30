@@ -78,7 +78,7 @@ export default defineComponent({
         console.log("set new")
         AccountService.updateAccountBankAssociation(this.associatedAccountId, this.bankAccount.id, this.importHistory)
       }
-      this.$emit('update')
+      this.$emit('update', this.importHistory)
     },
   }
 })
