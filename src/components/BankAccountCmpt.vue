@@ -9,7 +9,7 @@
           <span class="bold">{{syncedUntil}}</span>
         </span>
       </div>
-      <button v-if="!edit" v-on:click="updateEdit" class="illustration btn fas fa-pen action" :title="$t('EDIT')" />
+      <button v-if="!edit" v-on:click="updateEdit" class="illustration btn fas fa-pen action hideableActionGuide" :title="$t('EDIT')" />
       <button v-else v-on:click="updateEdit" class="illustration btn fas fa-times-circle action" :title="$t('CLOSE')" />
 
       <div class="details">
@@ -19,7 +19,7 @@
           </button>
         </div>
         <div v-else>
-          <BankAccountForm :bankAccount="bankAccount" :initiallyAssociatedAccount="initiallyAssociatedAccount"/>
+          <BankAccountForm :bankAccount="bankAccount" :initiallyAssociatedAccount="initiallyAssociatedAccount" @update="updateEdit"/>
         </div>
       </div>
   </div>

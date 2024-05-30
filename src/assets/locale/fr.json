@@ -170,5 +170,7 @@
     "ADD_BANK_ACCOUNT" : "ajouter un compte bancaire",
     "CONTACTING_BANKS" : "Vérification auprès des banques",
     "ASSOCIATE": "Associer",
-    "CLOSE" : "Fermer"
+    "CLOSE" : "Fermer",
+    "YES": "Oui",
+    "NO": "Non"
 }

@@ -2,10 +2,10 @@
   <div id="bankAccountForm" class="form">
     <div class="inline_label_input">
       <label class="label" for="selectAccount">{{ $t('ASSOCIATED_TO') }}</label>
-      <select id="selectAccount" class="form-select input" v-model="associetedAccount">
-        <option value=undefined>{{  }}</option>
+      <select id="selectAccount" class="form-select input" v-model="associatedAccountId">
+        <option value="none">{{  }}</option>
         <template v-for="account of accounts" :key="account">
-          <option :value=account>
+          <option :value=account.id>
           {{ account.name }}
           </option>
         </template>
@@ -13,24 +13,33 @@
     </div>
     <div class="inline_label_input history">
         <label class="label" for="importHistory">{{ $t('IMPORT_HISTORY') }}</label>
-        <input id="importHistory" class="form-check-input input" type="checkbox" v-model="importHistory" >
+        <div id="importHistory" class="input">
+          <label class="customSwitch yesNo">
+            <input class="switch-input" type="checkbox" v-model="importHistory"/>
+            <span class="switch-label" :data-on="$t('YES')" :data-off="$t('NO')"/>
+            <span class="switch-handle"/>
+          </label>
+        </div>
     </div>
-    <button class="actionButton" v-on:click="associateAccount">{{ $t('ASSOCIATE') }}</button>
+    <button class="actionButton" v-on:click="associate">{{ $t('ASSOCIATE') }}</button>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useBudgetStore } from '@/stores/budgetStore'
-import type { Account, BankAccount,GroupSelectOption } from '@/model/model'
+import type { Account, BankAccount } from '@/model/model'
+import AccountService from '@/services/AccountService'
 
 interface BankAccountFormData {
-  associetedAccount: Account|undefined;
+  associatedAccountId: string;
   importHistory: boolean
 }
 
 export default defineComponent({
   name: 'BankAccountForm',
+  created: async function () {
+  },
   props: {
     bankAccount: {
       type: Object as () => BankAccount,
@@ -42,7 +51,7 @@ export default defineComponent({
   },
   data (): BankAccountFormData {
     return {
-      associetedAccount: this.initiallyAssociatedAccount,
+      associatedAccountId: this.initiallyAssociatedAccount?.id || "none",
       importHistory: false
     }
   },
@@ -51,13 +60,25 @@ export default defineComponent({
       return useBudgetStore().accounts
     }
   },
-  emits: ['closeForm'],
-  methods: {
-    associateAccount() {
-
+  watch: {
+    associatedAccountId: async function () {
+      console.log(this.associatedAccountId)
     },
-    closeForm () {
-      this.$emit('closeForm')
+  },
+  emits: ['update'],
+  methods: {
+    associate() {
+      // remove association to old account
+      if (this.initiallyAssociatedAccount != undefined) {
+        console.log("remove old")
+        AccountService.updateAccountBankAssociation(this.initiallyAssociatedAccount.id, "none", this.importHistory)
+      }
+      // set association to new account
+      if (this.associatedAccountId != "none") {
+        console.log("set new")
+        AccountService.updateAccountBankAssociation(this.associatedAccountId, this.bankAccount.id, this.importHistory)
+      }
+      this.$emit('update')
     },
   }
 })
