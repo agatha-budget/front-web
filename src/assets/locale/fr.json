@@ -40,7 +40,6 @@
     "DEFAULT": "par défaut",
     "I18N_TRANSFER": "Transfert vers/depuis un autre compte",
     "TO_BE_PULLED_OUT": "à retirer",
-    "LOADING": "En route !",
     "ADD_MASTER_CATEGORY": "ajouter une catégorie",
     "ADD_CATEGORY": "ajouter une enveloppe",
     "HIDE_ARCHIVE": "cacher la corbeille",
@@ -175,5 +174,6 @@
     "NO": "Non",
     "ASSOCIATE_AGATHA": "Associer à un compte chez Agatha",
     "IMPORT_DONE": "Les dépenses des 3 derniers mois ont été importées",
-    "ASSOCIATE_TO" : "associer à"
+    "ASSOCIATE_TO" : "associer à",
+    "DEFAULT_LOADING_MSG": "AA"
 }
