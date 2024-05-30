@@ -174,5 +174,6 @@
     "YES": "Oui",
     "NO": "Non",
     "ASSOCIATE_AGATHA": "Associer à un compte chez Agatha",
-    "IMPORT_DONE": "Les dépenses des 3 derniers mois ont été importées"
+    "IMPORT_DONE": "Les dépenses des 3 derniers mois ont été importées",
+    "ASSOCIATE_TO" : "associer à"
 }

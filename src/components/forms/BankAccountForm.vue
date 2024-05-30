@@ -1,7 +1,7 @@
 <template>
   <div id="bankAccountForm" class="form">
     <div class="inline_label_input">
-      <label class="label" for="selectAccount">{{ $t('ASSOCIATED_TO') }}</label>
+      <label class="label" for="selectAccount">{{ $t('ASSOCIATE_TO') }}</label>
       <select id="selectAccount" class="form-select input" v-model="associatedAccountId">
         <option value="none">{{  }}</option>
         <template v-for="account of accounts" :key="account">
