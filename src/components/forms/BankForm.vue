@@ -1,5 +1,8 @@
 <template>
-  <div class="container">
+  <div class="container form header">
+    <div class="containerCross col-12">
+      <span class="cross fas fa-times-circle" v-on:click="closeForm()"/>
+    </div>
     <div class="subtitle">{{ $t('ADD_BANK_AUTHORIZATION') }}</div>
     <p>{{ $t('WHY_ADD_AUTHORIZATION_TEXT_P1') }}</p>
     <p class="bold">{{ $t('WHY_ADD_AUTHORIZATION_TEXT_P2') }}</p>
@@ -13,7 +16,7 @@
       :noResultsText="$t('NO_RESULT_FOUND')"
       :placeholder="$t('SELECT_BANK')"
     />
-    <button class="actionButton" v-on:click="getBankAuthorization">{{ $t('AUTHORIZE') }}</button>
+    <button class="actionButton" v-on:click="getBankAuthorization">{{ $t('ASK_AUTHORIZATION') }}</button>
   </div>
 </template>
 
@@ -55,12 +58,16 @@ export default defineComponent({
       return optionsList
     },
   },
+  emits: ['closeForm'],
   methods: {
     getBankAuthorization () {
       if (this.budget && this.selectedBankId) {
         BankingService.goToBankAgreement(this.budget, this.selectedBankId)
       }
-    }
+    },
+    closeForm () {
+      this.$emit('closeForm')
+    },
   }
 })
 </script>

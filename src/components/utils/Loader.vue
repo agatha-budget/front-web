@@ -1,7 +1,9 @@
 <template>
-  <div class="image-spinner">
-    <img src="@/assets/logo_round.png"/>
-    <div class="spin spinner"></div>
+  <div class="loader-container">
+    <div class="image-spinner">
+      <img src="@/assets/logo_round.png"/>
+      <div class="spin spinner"></div>
+    </div>
   </div>
 </template>
 

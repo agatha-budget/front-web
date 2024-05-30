@@ -1,6 +1,6 @@
 <template>
   <div :class="css">
-    <div class="bankPage menuLayout row col-md-8 offset-md-2 col-xxl-6 offset-xxl-3">
+    <div class="bankPage menuLayout ">
         <div class="header fixed title">
           {{ $t('BANKS') }}
         </div>
@@ -9,7 +9,7 @@
         </div>
 
         <div v-if="bankLoaded">
-          <BankForm v-if="displayBankForm" :availableBanks="availableBanks"/>
+          <BankForm v-if="displayBankForm" :availableBanks="availableBanks" @close-form="updateOpenBankForm"/>
           
           <template v-if="!displayBankForm">
             <button v-on:click="updateOpenBankForm" class="actionButton">{{$t('ADD_BANK_ACCOUNT')}}</button>

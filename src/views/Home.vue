@@ -1,20 +1,20 @@
 <template >
   <div :class="css">
-    <div class="row">
-      <div v-if="storeLoaded">
-        <div class="home">
+    <div v-if="storeLoaded">
+      <div class="home">
+        <div class="main">
           <BudgetCmpt :month="currentMonth" />
-          <div class="col-3 offset-1 col-xl-3 offset-xl-1 col-xxl-3 offset-xxl-1">
-            <div class="accountWidgetAtHome">
-              <AccountsWidget :page="'home'"/>
-            </div>
-            <NavMenu :page="'home'" />
+        </div>
+        <div class="sidebar">
+          <div class="accountWidget">
+            <AccountsWidget :page="'home'"/>
           </div>
+          <NavMenu :page="'home'" />
         </div>
       </div>
-      <div v-else>
-          <Loader class="loader"/>
-      </div>
+    </div>
+    <div v-else>
+        <Loader class="loader"/>
     </div>
   </div>
 </template>
