@@ -19,8 +19,7 @@
             </template>
           </div>
           <div v-else>
-            <Loader class="loader"/>
-            <p>{{ $t('CONTACTING_BANKS') }}</p>
+            <Loader class="loader" :message="$t('CONTACTING_BANKS')"/>
           </div>
         </div>
         <div class="placeholder bottom">
